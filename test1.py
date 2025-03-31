@@ -2,10 +2,9 @@ import zipfile
 import os
 
 # Décompression
-zip_path = 'C:\\Users\\Bidault\\Downloads\\test.zip'
+zip_path = 'C:\\Users\\carlot\\Downloads\\test.zip'
 
-extract_path = 'C:\\Users\\Bidault\\Downloads\\fruits_dataset'
-
+extract_path = 'C:\\Users\\carlot\\Downloads\\fruits_dataset'
 
 with zipfile.ZipFile(zip_path, 'r') as zip_ref:
     zip_ref.extractall(extract_path)
@@ -24,7 +23,7 @@ import os
 from PIL import Image
 
 # ======== 1. Config ========
-data_dir = 'C:\\Users\\Bidault\\Downloads\\fruits_dataset'  # Remplace par ton chemin local
+data_dir = 'C:\\Users\\carlot\\Downloads\\fruits_dataset'  # Remplace par ton chemin local
 batch_size = 32
 image_size = 224
 num_epochs = 5
@@ -115,6 +114,6 @@ def predict_image(image_path):
 
 # Exemple d'utilisation :
 # 
-print(predict_image('C:\\Users\\bidault\\Downloads\\banane.jpg'))
+print(predict_image('C:\\Users\\carlot\\Downloads\pomme.png'))
 
 
