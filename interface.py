@@ -169,6 +169,7 @@ class LoginWindow(BaseWindow):
         form_layout.addRow(self.login_button)
 
         self.setLayout(form_layout)
+        
 
     def login(self):
         entered_username = self.username_input.text()
