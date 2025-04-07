@@ -1,40 +1,38 @@
 import sys
 import json
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLineEdit, QLabel, QFormLayout, QMessageBox, QHBoxLayout, QInputDialog, QComboBox
+from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QLineEdit,
+                             QLabel, QFormLayout, QMessageBox, QInputDialog,
+                             QComboBox, QStackedLayout)
 from PyQt5.QtCore import Qt
 
 class UserData:
-    """Classe pour stocker les données utilisateur globalement."""
     def __init__(self):
         self.username = ""
         self.password = ""
-        self.ingredients = []  # Liste des ingrédients avec leurs quantités
+        self.ingredients = []
 
     def save_to_file(self):
-        """Enregistrer les informations utilisateur et les ingrédients dans un fichier JSON."""
         data = {
             "username": self.username,
             "password": self.password,
-            "ingredients": self.ingredients  # Sauvegarder les ingrédients
+            "ingredients": self.ingredients
         }
         with open(f"{self.username}_data.json", "w") as f:
             json.dump(data, f)
 
     def load_from_file(self):
-        """Charger les informations utilisateur et les ingrédients à partir d'un fichier JSON."""
         try:
             with open(f"{self.username}_data.json", "r") as f:
                 data = json.load(f)
                 self.username = data.get("username", "")
                 self.password = data.get("password", "")
-                self.ingredients = data.get("ingredients", [])  # Charger les ingrédients
+                self.ingredients = data.get("ingredients", [])
         except FileNotFoundError:
-            pass  # Si le fichier n'existe pas, ne rien faire
+            pass
 
-user_data = UserData()  # Instance pour stocker les données de l'utilisateur
+user_data = UserData()
 
 class BaseWindow(QWidget):
-    """Fenêtre de base qui applique le même style à toutes les fenêtres."""
     def __init__(self):
         super().__init__()
         self.setStyleSheet("""
@@ -48,9 +46,11 @@ class BaseWindow(QWidget):
                 background-color: #4CAF50;
                 color: white;
                 border: none;
-                padding: 10px;
-                font-size: 14px;
-                border-radius: 5px;
+                padding: 15px 25px;
+                font-size: 16px;
+                border-radius: 8px;
+                min-width: 300px;
+                min-height: 60px;
             }
             QPushButton:hover {
                 background-color: #45a049;
@@ -62,6 +62,12 @@ class BaseWindow(QWidget):
                 background-color: #555;
                 color: white;
                 border-radius: 5px;
+                padding: 10px;
+                font-size: 16px;
+                min-width: 300px;
+            }
+            QLabel {
+                font-size: 18px;
                 padding: 5px;
             }
         """)
@@ -69,221 +75,167 @@ class BaseWindow(QWidget):
 class MainWindow(BaseWindow):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("Interface Moderne")
         self.setGeometry(400, 400, 800, 650)
 
-        # Layout principal pour les boutons
-        self.layout = QVBoxLayout()
-        self.layout.setAlignment(Qt.AlignCenter)
+        self.stack_layout = QStackedLayout()
 
-        # Boutons de la page d'accueil
-        self.button1 = QPushButton("Créer un compte", self)
-        self.button1.setFixedSize(400, 100)
-        self.button1.clicked.connect(self.on_click_button1)
+        self.home_widget = self.create_home_page()
+        self.account_widget = AccountCreationPage(self)
+        self.login_widget = LoginPage(self)
+        self.menu_widget = MenuPage(self)
+        self.frigo_widget = FrigoPage(self)
 
-        self.button2 = QPushButton("Connexion", self)
-        self.button2.setFixedSize(400, 100)
-        self.button2.clicked.connect(self.on_click_button2)
+        self.stack_layout.addWidget(self.home_widget)
+        self.stack_layout.addWidget(self.account_widget)
+        self.stack_layout.addWidget(self.login_widget)
+        self.stack_layout.addWidget(self.menu_widget)
+        self.stack_layout.addWidget(self.frigo_widget)
 
-        # Ajouter les boutons à l'interface principale
-        self.layout.addWidget(self.button1)
-        self.layout.addWidget(self.button2)
+        self.setLayout(self.stack_layout)
+        self.stack_layout.setCurrentIndex(0)
 
-        self.setLayout(self.layout)
+    def create_home_page(self):
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
 
-    def on_click_button1(self):
-        print("Le bouton 'Créer un compte' a été cliqué!")
-        self.account_window = AccountCreationWindow()
-        self.account_window.show()
+        button1 = QPushButton("Créer un compte")
+        button1.clicked.connect(lambda: self.stack_layout.setCurrentIndex(1))
 
-    def on_click_button2(self):
-        print("Le bouton 'Connexion' a été cliqué!")
-        self.login_window = LoginWindow()
-        self.login_window.show()
+        button2 = QPushButton("Connexion")
+        button2.clicked.connect(lambda: self.stack_layout.setCurrentIndex(2))
 
-class AccountCreationWindow(BaseWindow):
-    def __init__(self):
+        layout.addWidget(button1)
+        layout.addWidget(button2)
+
+        container = QWidget()
+        container.setLayout(layout)
+        return container
+
+    def go_to_menu(self):
+        self.stack_layout.setCurrentIndex(3)
+
+    def go_to_frigo(self):
+        self.frigo_widget.update_ingredients()
+        self.stack_layout.setCurrentIndex(4)
+
+class AccountCreationPage(QWidget):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
 
-        self.setWindowTitle("Créer un compte")
-        self.setGeometry(100, 100, 400, 250)
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
 
-        # Création des widgets pour l'interface de création de compte
-        self.username_label = QLabel("Identifiant:")
-        self.username_input = QLineEdit(self)
+        self.username_input = QLineEdit()
+        self.password_input = QLineEdit()
+        self.password_input.setEchoMode(QLineEdit.Password)
 
-        self.password_label = QLabel("Mot de passe:")
-        self.password_input = QLineEdit(self)
-        self.password_input.setEchoMode(QLineEdit.Password)  # Pour masquer le mot de passe
+        submit_button = QPushButton("Créer le compte")
+        submit_button.clicked.connect(self.create_account)
 
-        # Création d'un bouton pour valider la création du compte
-        self.submit_button = QPushButton("Créer le compte", self)
-        self.submit_button.clicked.connect(self.create_account)
+        layout.addWidget(QLabel("Identifiant:"))
+        layout.addWidget(self.username_input)
+        layout.addWidget(QLabel("Mot de passe:"))
+        layout.addWidget(self.password_input)
+        layout.addWidget(submit_button)
 
-        # Layout pour organiser les éléments
-        form_layout = QFormLayout()
-        form_layout.addRow(self.username_label, self.username_input)
-        form_layout.addRow(self.password_label, self.password_input)
-        form_layout.addRow(self.submit_button)
-
-        self.setLayout(form_layout)
+        self.setLayout(layout)
 
     def create_account(self):
-        username = self.username_input.text()
-        password = self.password_input.text()
-
-        # Enregistrer les informations dans l'instance UserData
-        user_data.username = username
-        user_data.password = password
-
-        # Sauvegarder les données utilisateur dans un fichier JSON
+        user_data.username = self.username_input.text()
+        user_data.password = self.password_input.text()
         user_data.save_to_file()
+        self.main_window.stack_layout.setCurrentIndex(0)
 
-        print(f"Compte créé avec l'identifiant: {username} et le mot de passe: {password}")
-        self.close()
-
-class LoginWindow(BaseWindow):
-    def __init__(self):
+class LoginPage(QWidget):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
 
-        self.setWindowTitle("Connexion")
-        self.setGeometry(100, 100, 400, 250)
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
 
-        # Création des widgets pour l'interface de connexion
-        self.username_label = QLabel("Identifiant:")
-        self.username_input = QLineEdit(self)
+        self.username_input = QLineEdit()
+        self.password_input = QLineEdit()
+        self.password_input.setEchoMode(QLineEdit.Password)
 
-        self.password_label = QLabel("Mot de passe:")
-        self.password_input = QLineEdit(self)
-        self.password_input.setEchoMode(QLineEdit.Password)  # Pour masquer le mot de passe
+        login_button = QPushButton("Se connecter")
+        login_button.clicked.connect(self.login)
 
-        # Création d'un bouton pour valider la connexion
-        self.login_button = QPushButton("Se connecter", self)
-        self.login_button.clicked.connect(self.login)
+        layout.addWidget(QLabel("Identifiant:"))
+        layout.addWidget(self.username_input)
+        layout.addWidget(QLabel("Mot de passe:"))
+        layout.addWidget(self.password_input)
+        layout.addWidget(login_button)
 
-        # Layout pour organiser les éléments
-        form_layout = QFormLayout()
-        form_layout.addRow(self.username_label, self.username_input)
-        form_layout.addRow(self.password_label, self.password_input)
-        form_layout.addRow(self.login_button)
-
-        self.setLayout(form_layout)
-        
+        self.setLayout(layout)
 
     def login(self):
-        entered_username = self.username_input.text()
-        entered_password = self.password_input.text()
-
-        # Charger les données utilisateur depuis le fichier
-        user_data.username = entered_username
+        user_data.username = self.username_input.text()
         user_data.load_from_file()
 
-        # Vérifier si les identifiants sont corrects
-        if entered_username == user_data.username and entered_password == user_data.password:
-            print("Connexion réussie!")
-            # Passer à l'écran de menu après la connexion
-            self.menu_window = MenuWindow()
-            self.menu_window.show()
-            self.close()
+        if self.username_input.text() == user_data.username and self.password_input.text() == user_data.password:
+            self.main_window.go_to_menu()
         else:
-            # Afficher un message d'erreur si les identifiants sont incorrects
-            self.show_error_message()
+            error_message = QMessageBox()
+            error_message.setIcon(QMessageBox.Critical)
+            error_message.setText("Identifiant ou mot de passe incorrect!")
+            error_message.setWindowTitle("Erreur de connexion")
+            error_message.exec_()
 
-    def show_error_message(self):
-        error_message = QMessageBox()
-        error_message.setIcon(QMessageBox.Critical)
-        error_message.setText("Identifiant ou mot de passe incorrect!")
-        error_message.setWindowTitle("Erreur de connexion")
-        error_message.exec_()
-
-class MenuWindow(BaseWindow):
-    def __init__(self):
+class MenuPage(QWidget):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
 
-        self.setWindowTitle("Menu d'accueil")
-        self.setGeometry(100, 100, 400, 300)
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
 
-        self.layout = QVBoxLayout()
+        button1 = QPushButton("Ajouter des ingrédients manuellement")
+        button1.clicked.connect(self.add_ingredient)
 
-        # Bouton pour ajouter des ingrédients manuellement
-        self.ingredients_button = QPushButton("Ajouter des ingrédients manuellement", self)
-        self.ingredients_button.setFixedSize(300, 75)
-        self.ingredients_button.clicked.connect(self.on_add_ingredients)
+        button2 = QPushButton("Mon Frigo")
+        button2.clicked.connect(self.main_window.go_to_frigo)
 
-        # Bouton pour accéder à "Mon Frigo"
-        self.frigo_button = QPushButton("Mon Frigo", self)
-        self.frigo_button.setFixedSize(300, 75)
-        self.frigo_button.clicked.connect(self.on_click_frigo_button)
+        layout.addWidget(button1)
+        layout.addWidget(button2)
 
-        # Ajouter les boutons à l'interface
-        self.layout.addWidget(self.ingredients_button)
-        self.layout.addWidget(self.frigo_button)
+        self.setLayout(layout)
 
-        self.setLayout(self.layout)
-
-    def on_add_ingredients(self):
-        print("Ajouter des ingrédients manuellement")
+    def add_ingredient(self):
         ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
         if ok and ingredient:
-            # Demander la quantité de l'ingrédient
-            quantity, unit, unit_ok = self.get_ingredient_quantity()
-            if unit_ok:
-                user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})  # Ajouter l'ingrédient avec la quantité
-                user_data.save_to_file()  # Sauvegarder la liste mise à jour
-                print(f"Ingrédient ajouté: {ingredient} ({quantity} {unit})")
+            quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
+            if ok1:
+                units = ["g", "kg", "unités"]
+                unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
+                if ok2:
+                    user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
+                    user_data.save_to_file()
 
-    def get_ingredient_quantity(self):
-        # Demander la quantité
-        quantity, ok = QInputDialog.getDouble(self, "Quantité", "Quantité de l'ingrédient:", decimals=2)
-        if not ok:
-            return None, None, False
-
-        # Demander l'unité
-        units = ["g", "kg", "unités"]
-        unit, unit_ok = QInputDialog.getItem(self, "Unité", "Choisissez l'unité:", units, 0, False)
-        if not unit_ok:
-            return None, None, False
-
-        return quantity, unit, True
-
-    def on_click_frigo_button(self):
-        print("Le bouton 'Mon Frigo' a été cliqué!")
-        self.frigo_window = FrigoWindow()
-        self.frigo_window.show()
-        # self.close()  # Fermer la fenêtre principale
-
-class FrigoWindow(BaseWindow):
-    def __init__(self):
+class FrigoPage(QWidget):
+    def __init__(self, main_window):
         super().__init__()
-
-        self.setWindowTitle("Mon Frigo")
-        self.setGeometry(100, 100, 400, 300)
-
+        self.main_window = main_window
         self.layout = QVBoxLayout()
-
-        # Afficher la liste des ingrédients
-        self.ingredients_label = QLabel("Ingrédients dans mon frigo:")
-        self.layout.addWidget(self.ingredients_label)
-        print (f"user_data.ingredients = {user_data.ingredients}")
-        for ingredient in user_data.ingredients: 
-            print(f"ingredient = {ingredient}")
-            ingredient_label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
-            self.layout.addWidget(ingredient_label)
-
-        # Ajouter un bouton pour revenir au menu
-        self.back_button = QPushButton("Retour au menu", self)
-        self.back_button.setFixedSize(300, 75)
-        self.back_button.clicked.connect(self.on_back_button)
-
-        self.layout.addWidget(self.back_button)
-
+        self.layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.layout)
 
-    def on_back_button(self):
-        self.menu_window = MenuWindow()
-        self.menu_window.show()
-        self.close()
+    def update_ingredients(self):
+        for i in reversed(range(self.layout.count())):
+            widget = self.layout.itemAt(i).widget()
+            if widget:
+                widget.deleteLater()
+
+        self.layout.addWidget(QLabel("Ingrédients dans mon frigo:"))
+        for ingredient in user_data.ingredients:
+            label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
+            self.layout.addWidget(label)
+
+        back_button = QPushButton("Retour au menu")
+        back_button.clicked.connect(self.main_window.go_to_menu)
+        self.layout.addWidget(back_button)
 
 def main():
     app = QApplication(sys.argv)
@@ -293,4 +245,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
