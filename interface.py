@@ -75,7 +75,10 @@ class BaseWindow(QWidget):
 class MainWindow(BaseWindow):
     def __init__(self):
         super().__init__()
+
         self.setWindowTitle("Interface Moderne")
+
+        self.setWindowTitle("RECIPEASY")
         self.setGeometry(400, 400, 800, 650)
 
         self.stack_layout = QStackedLayout()
