@@ -70,7 +70,7 @@ class MainWindow(BaseWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Interface Moderne")
+        self.setWindowTitle("RECIPEASY")
         self.setGeometry(400, 400, 800, 650)
 
         # Layout principal pour les boutons
