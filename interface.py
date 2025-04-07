@@ -71,7 +71,7 @@ class MainWindow(BaseWindow):
         super().__init__()
 
         self.setWindowTitle("Interface Moderne")
-        self.setGeometry(100, 100, 400, 300)
+        self.setGeometry(400, 400, 800, 650)
 
         # Layout principal pour les boutons
         self.layout = QVBoxLayout()
@@ -79,11 +79,11 @@ class MainWindow(BaseWindow):
 
         # Boutons de la page d'accueil
         self.button1 = QPushButton("Créer un compte", self)
-        self.button1.setFixedSize(300, 75)
+        self.button1.setFixedSize(400, 100)
         self.button1.clicked.connect(self.on_click_button1)
 
         self.button2 = QPushButton("Connexion", self)
-        self.button2.setFixedSize(300, 75)
+        self.button2.setFixedSize(400, 100)
         self.button2.clicked.connect(self.on_click_button2)
 
         # Ajouter les boutons à l'interface principale
