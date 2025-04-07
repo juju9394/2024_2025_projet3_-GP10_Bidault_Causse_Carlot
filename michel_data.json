@@ -1,1 +1,1 @@
-{"username": "michel", "password": "123", "ingredients": [{"name": "oeuf", "quantity": 1.0, "unit": "unit\u00e9s"}, {"name": "pomme", "quantity": 10.0, "unit": "g"}]}
+{"username": "michel", "password": "123", "ingredients": [{"name": "oeuf", "quantity": 1.0, "unit": "unit\u00e9s"}, {"name": "pomme", "quantity": 10.0, "unit": "g"}, {"name": "poisson", "quantity": 1.0, "unit": "kg"}]}
