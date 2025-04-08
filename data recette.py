@@ -60,6 +60,15 @@
       "Ajouter l'ail et les champignons, cuire à feu vif en remuant jusqu'à évaporation complète de l'eau de végétation (environ 10 minutes).",
       "Ajouter le persil haché, saler et poivrer. Laisser refroidir complètement.",
       "Préchauffer le four à 200°C."
+      "Étaler la pâte feuilletée sur un plan de travail fariné."
+      "Disposer les tranches de jambon cru au centre de la pâte en les faisant légèrement se chevaucher."
+      "Étaler la moutarde sur le filet mignon refroidi, puis le recouvrir uniformément de duxelles de champignons."
+      "Placer le filet mignon garni au centre des tranches de jambon."
+      "Rabattre les tranches de jambon autour du filet, puis refermer la pâte feuilletée en soudant bien les bords."
+      "Retourner délicatement le rôti pour placer la soudure en dessous, puis déposer sur une plaque de cuisson recouverte de papier sulfurisé."
+      "Badigeonner toute la surface avec le jaune d'œuf et faire quelques entailles décoratives sur le dessus."
+      "Enfourner pour 25 à 30 minutes jusqu'à ce que la croûte soit bien dorée."
+      "Laisser reposer 5 minutes avant de trancher et servir."
     ]
   }
 }
