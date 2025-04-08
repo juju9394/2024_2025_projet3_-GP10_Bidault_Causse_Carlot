@@ -152,11 +152,8 @@
         "quantite": "2 gousses",
         "unite": " "
       },
-      "fleur_sel": {
-        "quantite": "1 cuillère à café",
-        "unite": "cuillère à café"
-      },
       
+    
     },
     "etapes": [
       "Préchauffez votre four à 180°C en chaleur tournante.",
