@@ -207,8 +207,13 @@ class MenuPage(QWidget):
         button2 = QPushButton("Mon Frigo")
         button2.clicked.connect(self.main_window.go_to_frigo)
 
+        self.recipe_button = QPushButton('Proposer une recette')
+        self.recipe_button.clicked.connect(self.proposer_recette)
+
         layout.addWidget(button1)
         layout.addWidget(button2)
+        layout.addWidget(self.recipe_button)
+
 
         self.setLayout(layout)
 
@@ -222,6 +227,10 @@ class MenuPage(QWidget):
                 if ok2:
                     user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
                     user_data.save_to_file()
+
+    def proposer_recette(self):
+        # Ici plus tard tu mettras ton IA
+        QMessageBox.information(self, "Recette", "Voici une recette que l'IA te proposera ici !")
 
 class FrigoPage(QWidget):
     def __init__(self, main_window):
