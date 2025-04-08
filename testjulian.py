@@ -201,7 +201,7 @@ class MenuPage(QWidget):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
 
-        button1 = QPushButton("Ajouter des ingrédients manuellement")
+        button1 = QPushButton("Ajouter des ingrédients")
         button1.clicked.connect(self.add_ingredient)
 
         button2 = QPushButton("Mon Frigo")
