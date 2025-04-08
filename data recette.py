@@ -1,7 +1,8 @@
 {
   "recette": {
     "nom": "Filet mignon en croûte",
-    "description": "Recette gourmande aux champignons et moutarde",
+    "temps_cuisson": "65 minutes",
+    
     "ingredients": {
       "filet_mignon": {
         "quantite": "1 filet mignon de porc d'environ 600g",
@@ -11,10 +12,7 @@
         "quantite": "2 cuillères à soupe",
         "unite": "cuillères à soupe"
       },
-      "sel_poivre": {
-        "quantite": "au goût",
-        "unite": " "
-      },
+      
       "champignons": {
         "quantite": "250g",
         "unite": "g"
@@ -68,6 +66,7 @@
 {
   "recette": {
     "nom": "Quiche saumon-épinards",
+    "temps_cuisson": "35 minutes",
     "ingredients": {
       "pate_brisee": {
         "quantite": "1",
@@ -109,10 +108,6 @@
         "quantite": "1 noix",
         "unite": " "
       },
-      "sel_poivre": {
-        "quantite": "au goût",
-        "unite": " "
-      }
     },
     "etapes": [
       "Préchauffer le four à 180°C.",
@@ -125,6 +120,53 @@
       "Verser l'appareil à quiche sur les ingrédients et parsemer de gruyère râpé.",
       "Enfourner pour 30-35 minutes jusqu'à ce que la quiche soit dorée et que l'appareil soit bien pris.",
       "Laisser tiédir quelques minutes avant de servir."
+    ]
+  }
+}
+{
+  "recette": {
+    "nom": "Dos de cabillaud au four",
+    "temps_cuisson": "35 minutes",
+    "ingredients": {
+      "dos_cabillaud": {
+        "quantite": "4 dos",
+        "unite": " "
+      },
+      "huile_olive": {
+        "quantite": "4 cuillères à soupe",
+        "unite": "cuillères à soupe"
+      },
+      "citrons": {
+        "quantite": "2",
+        "unite": " "
+      },
+      "thym": {
+        "quantite": "2 branches",
+        "unite": " "
+      },
+      "romarin": {
+        "quantite": "2 branches",
+        "unite": " "
+      },
+      "ail": {
+        "quantite": "2 gousses",
+        "unite": " "
+      },
+      "fleur_sel": {
+        "quantite": "1 cuillère à café",
+        "unite": "cuillère à café"
+      },
+      
+    },
+    "etapes": [
+      "Préchauffez votre four à 180°C en chaleur tournante.",
+      "Rincez les dos de cabillaud sous l'eau froide et séchez-les délicatement avec du papier absorbant.",
+      "Dans un plat allant au four, disposez les dos de cabillaud et arrosez-les d'huile d'olive.",
+      "Pelez et émincez finement l'ail, parsemez-le sur le poisson.",
+      "Ajoutez le thym et le romarin effeuillés autour des poissons.",
+      "Pressez un citron et arrosez-en les dos de cabillaud. Coupez l'autre citron en rondelles et disposez-les dans le plat.",
+      "Saler et poivrer généreusement.",
+      "Enfournez pour 15-20 minutes selon l'épaisseur des dos de cabillaud."
     ]
   }
 }
