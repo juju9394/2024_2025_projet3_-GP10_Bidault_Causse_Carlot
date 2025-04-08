@@ -138,8 +138,8 @@
     "temps_cuisson": "35 minutes",
     "ingredients": {
       "dos_cabillaud": {
-        "quantite": "4 dos",
-        "unite": " "
+        "quantite": "400",
+        "unite": "g "
       },
       "huile_olive": {
         "quantite": "4 cuillères à soupe",
@@ -184,8 +184,8 @@
     "temps_cuisson": "45 minutes",
     "ingredients": {
       "blancs_poulet": {
-        "quantite": "4",
-        "unite": " "
+        "quantite": "400",
+        "unite": " g"
       },
       "huile_olive": {
         "quantite": "3 cuillères à soupe",
@@ -203,10 +203,7 @@
         "quantite": "1",
         "unite": " "
       },
-      "sel_poivre": {
-        "quantite": "au goût",
-        "unite": " "
-      }
+      
     },
     "etapes": [
       "Préchauffer le four à 180°C.",
