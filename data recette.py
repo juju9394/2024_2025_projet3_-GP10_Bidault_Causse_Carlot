@@ -60,6 +60,15 @@
       "Ajouter l'ail et les champignons, cuire à feu vif en remuant jusqu'à évaporation complète de l'eau de végétation (environ 10 minutes).",
       "Ajouter le persil haché, saler et poivrer. Laisser refroidir complètement.",
       "Préchauffer le four à 200°C."
+      "Étaler la pâte feuilletée sur un plan de travail fariné."
+      "Disposer les tranches de jambon cru au centre de la pâte en les faisant légèrement se chevaucher."
+      "Étaler la moutarde sur le filet mignon refroidi, puis le recouvrir uniformément de duxelles de champignons."
+      "Placer le filet mignon garni au centre des tranches de jambon."
+      "Rabattre les tranches de jambon autour du filet, puis refermer la pâte feuilletée en soudant bien les bords."
+      "Retourner délicatement le rôti pour placer la soudure en dessous, puis déposer sur une plaque de cuisson recouverte de papier sulfurisé."
+      "Badigeonner toute la surface avec le jaune d'œuf et faire quelques entailles décoratives sur le dessus."
+      "Enfourner pour 25 à 30 minutes jusqu'à ce que la croûte soit bien dorée."
+      "Laisser reposer 5 minutes avant de trancher et servir."
     ]
   }
 }
@@ -129,8 +138,8 @@
     "temps_cuisson": "35 minutes",
     "ingredients": {
       "dos_cabillaud": {
-        "quantite": "4 dos",
-        "unite": " "
+        "quantite": "400",
+        "unite": "g "
       },
       "huile_olive": {
         "quantite": "4 cuillères à soupe",
@@ -164,6 +173,46 @@
       "Pressez un citron et arrosez-en les dos de cabillaud. Coupez l'autre citron en rondelles et disposez-les dans le plat.",
       "Saler et poivrer généreusement.",
       "Enfournez pour 15-20 minutes selon l'épaisseur des dos de cabillaud."
+    ]
+  }
+}
+
+
+{
+  "recette": {
+    "nom": "Blanc de poulet au four",
+    "temps_cuisson": "45 minutes",
+    "ingredients": {
+      "blancs_poulet": {
+        "quantite": "400",
+        "unite": " g"
+      },
+      "huile_olive": {
+        "quantite": "3 cuillères à soupe",
+        "unite": "cuillères à soupe"
+      },
+      "herbes_provence": {
+        "quantite": "2 cuillères à café",
+        "unite": "cuillères à café"
+      },
+      "ail": {
+        "quantite": "2 gousses",
+        "unite": " "
+      },
+      "citron": {
+        "quantite": "1",
+        "unite": " "
+      },
+      
+    },
+    "etapes": [
+      "Préchauffer le four à 180°C.",
+      "Dans un bol, mélanger l'huile d'olive, les herbes de Provence, l'ail émincé, le jus du citron, le sel et le poivre.",
+      "Badigeonner généreusement les blancs de poulet avec ce mélange.",
+      "Placer les blancs de poulet dans un plat allant au four.",
+      "Enfourner pour 25-30 minutes, en retournant à mi-cuisson.",
+      "Vérifier la cuisson en piquant la chair : le jus doit être clair.",
+      "Laisser reposer 5 minutes avant de servir."
     ]
   }
 }
