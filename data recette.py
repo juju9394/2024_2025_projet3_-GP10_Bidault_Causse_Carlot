@@ -176,3 +176,46 @@
     ]
   }
 }
+
+
+{
+  "recette": {
+    "nom": "Blanc de poulet au four",
+    "temps_cuisson": "45 minutes",
+    "ingredients": {
+      "blancs_poulet": {
+        "quantite": "4",
+        "unite": " "
+      },
+      "huile_olive": {
+        "quantite": "3 cuillères à soupe",
+        "unite": "cuillères à soupe"
+      },
+      "herbes_provence": {
+        "quantite": "2 cuillères à café",
+        "unite": "cuillères à café"
+      },
+      "ail": {
+        "quantite": "2 gousses",
+        "unite": " "
+      },
+      "citron": {
+        "quantite": "1",
+        "unite": " "
+      },
+      "sel_poivre": {
+        "quantite": "au goût",
+        "unite": " "
+      }
+    },
+    "etapes": [
+      "Préchauffer le four à 180°C.",
+      "Dans un bol, mélanger l'huile d'olive, les herbes de Provence, l'ail émincé, le jus du citron, le sel et le poivre.",
+      "Badigeonner généreusement les blancs de poulet avec ce mélange.",
+      "Placer les blancs de poulet dans un plat allant au four.",
+      "Enfourner pour 25-30 minutes, en retournant à mi-cuisson.",
+      "Vérifier la cuisson en piquant la chair : le jus doit être clair.",
+      "Laisser reposer 5 minutes avant de servir."
+    ]
+  }
+}
