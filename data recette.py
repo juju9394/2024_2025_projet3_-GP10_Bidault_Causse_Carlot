@@ -65,3 +65,66 @@
     ]
   }
 }
+{
+  "recette": {
+    "nom": "Quiche saumon-épinards",
+    "ingredients": {
+      "pate_brisee": {
+        "quantite": "1",
+        "unite": " "
+      },
+      "saumon": {
+        "quantite": "300g",
+        "unite": "g"
+      },
+      "epinards": {
+        "quantite": "400g",
+        "unite": "g"
+      },
+      "oeufs": {
+        "quantite": "3",
+        "unite": " "
+      },
+      "creme_fraiche": {
+        "quantite": "20cl",
+        "unite": "cl"
+      },
+      "lait": {
+        "quantite": "10cl",
+        "unite": "cl"
+      },
+      "oignon": {
+        "quantite": "1",
+        "unite": " "
+      },
+      "ail": {
+        "quantite": "2 gousses",
+        "unite": " "
+      },
+      "gruyere": {
+        "quantite": "100g",
+        "unite": "g"
+      },
+      "beurre": {
+        "quantite": "1 noix",
+        "unite": " "
+      },
+      "sel_poivre": {
+        "quantite": "au goût",
+        "unite": " "
+      }
+    },
+    "etapes": [
+      "Préchauffer le four à 180°C.",
+      "Étaler la pâte brisée dans un moule à tarte et la piquer avec une fourchette. Faire précuire à blanc pendant 10 minutes.",
+      "Pendant ce temps, laver les épinards frais et les faire fondre dans une poêle avec une noix de beurre (ou décongeler les épinards surgelés). Bien les égoutter en les pressant pour retirer l'excès d'eau.",
+      "Émincer l'oignon et hacher l'ail. Les faire revenir dans une poêle jusqu'à ce qu'ils soient translucides.",
+      "Couper le saumon en petits dés.",
+      "Dans un saladier, battre les œufs avec la crème fraîche et le lait. Saler, poivrer et ajouter la noix de muscade.",
+      "Mélanger les épinards, l'oignon, l'ail et les dés de saumon, puis répartir sur le fond de tarte précuit.",
+      "Verser l'appareil à quiche sur les ingrédients et parsemer de gruyère râpé.",
+      "Enfourner pour 30-35 minutes jusqu'à ce que la quiche soit dorée et que l'appareil soit bien pris.",
+      "Laisser tiédir quelques minutes avant de servir."
+    ]
+  }
+}
