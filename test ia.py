@@ -21,12 +21,18 @@
 #     if any(aliment.lower() in text.lower() for aliment in aliments):
 #         print("Aliment trouvé:", text)
 from PIL import Image
+import numpy as np
 
-# Ouvrir une image
-image = Image.open('file:///H:/Documents/Nsi/ticket_de_caisse.jpg')
+# Charger l'image
+image = Image.open('ticket_de_caisse.jpg')
 
-# Appliquer des modifications à l'image (conversion en noir et blanc par exemple)
+# Redimensionner l'image (par exemple à 128x128 pixels)
+image = image.resize((128, 128))
+
+# Convertir l'image en niveaux de gris
 bw_image = image.convert('L')
 
-# Sauvegarder l'image modifiée
-bw_image.save('image_bw.jpg')
+# Normalisation des pixels (valeurs entre 0 et 1)
+bw_image = np.array(bw_image) / 255.0
+
+# Sauvegarder ou passer à l'étape suivante
