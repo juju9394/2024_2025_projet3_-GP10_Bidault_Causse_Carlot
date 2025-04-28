@@ -150,12 +150,12 @@
         "unite": " "
       },
       "thym": {
-        "quantite": "2 branches",
-        "unite": " "
+        "quantite": "2 ",
+        "unite": "g "
       },
       "romarin": {
-        "quantite": "2 branches",
-        "unite": " "
+        "quantite": "2 ",
+        "unite": " g"
       },
       "ail": {
         "quantite": "2 gousses",
