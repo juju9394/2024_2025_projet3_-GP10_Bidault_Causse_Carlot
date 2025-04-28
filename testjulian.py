@@ -196,14 +196,21 @@ class LoginPage(QWidget):
             QMessageBox.critical(self, "Erreur de connexion", "Identifiant ou mot de passe incorrect!")
 
 
+from PyQt5.QtWidgets import (QScrollArea, QVBoxLayout, QWidget, QPushButton, QLabel)
+
 class MenuPage(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
 
-        self.layout = QVBoxLayout()
-        self.layout.setAlignment(Qt.AlignCenter)
-        self.layout.setSpacing(25)
+        self.main_layout = QVBoxLayout()
+        self.main_layout.setAlignment(Qt.AlignCenter)
+        self.main_layout.setSpacing(25)
+
+        # Layout principal pour les 3 boutons
+        self.buttons_layout = QVBoxLayout()
+        self.buttons_layout.setAlignment(Qt.AlignCenter)
+        self.buttons_layout.setSpacing(20)
 
         self.button1 = QPushButton("Ajouter des ingrédients")
         self.button1.clicked.connect(self.add_ingredient)
@@ -214,23 +221,47 @@ class MenuPage(QWidget):
         self.recipe_button = QPushButton("Proposer une recette")
         self.recipe_button.clicked.connect(self.proposer_recette)
 
-        self.layout.addWidget(self.button1)
-        self.layout.addWidget(self.button2)
-        self.layout.addWidget(self.recipe_button)
+        self.buttons_layout.addWidget(self.button1)
+        self.buttons_layout.addWidget(self.button2)
+        self.buttons_layout.addWidget(self.recipe_button)
+
+        self.buttons_widget = QWidget()
+        self.buttons_widget.setLayout(self.buttons_layout)
+        self.main_layout.addWidget(self.buttons_widget)
+
+        # Zone Scroll qui sera affichée SEULEMENT pour les recettes
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.hide()
 
         self.recette_container = QWidget()
         self.recette_layout = QVBoxLayout()
-        self.recette_layout.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        self.recette_layout.setAlignment(Qt.AlignTop)
         self.recette_container.setLayout(self.recette_layout)
+        self.scroll_area.setWidget(self.recette_container)
 
-        self.layout.addWidget(self.recette_container)
+        self.main_layout.addWidget(self.scroll_area)
 
+        # Bouton Retour tout en haut dans le scroll
         self.back_button = QPushButton("Retour")
         self.back_button.clicked.connect(self.retour_menu)
+        self.back_button.setStyleSheet("""
+            QPushButton {
+                background-color: #ff5c5c;
+                border-radius: 10px;
+                padding: 10px;
+                font-size: 16px;
+                color: white;
+                min-width: 120px;
+            }
+            QPushButton:hover {
+                background-color: #ff1c1c;
+            }
+        """)
+        self.recette_layout.addWidget(self.back_button, alignment=Qt.AlignCenter)
         self.back_button.hide()
-        self.layout.addWidget(self.back_button)
 
-        self.setLayout(self.layout)
+        self.setLayout(self.main_layout)
 
     def add_ingredient(self):
         ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
@@ -243,17 +274,21 @@ class MenuPage(QWidget):
                     user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
                     user_data.save_to_file()
             else:
-                QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")        
+                QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")
 
     def proposer_recette(self):
-        self.button1.hide()
-        self.button2.hide()
-        self.recipe_button.hide()
+        # Cacher boutons principaux
+        self.buttons_widget.hide()
 
-        for i in reversed(range(self.recette_layout.count())):
-            widget = self.recette_layout.itemAt(i).widget()
-            if widget:
-                widget.deleteLater()
+        self.scroll_area.show()
+
+        # Nettoyer les anciennes cartes sauf le bouton retour
+        while self.recette_layout.count() > 1:
+            item = self.recette_layout.takeAt(1)
+            if item.widget():
+                item.widget().deleteLater()
+
+        self.back_button.show()
 
         for recette in recettes:
             recette_card = QPushButton(f"🍽️ {recette['nom']} \n⏲️ {recette['temps_cuisson']}")
@@ -274,20 +309,17 @@ class MenuPage(QWidget):
                 }
             """)
             recette_card.clicked.connect(lambda _, r=recette: self.show_recette_detail(r))
-            self.recette_layout.addWidget(recette_card)
-
-        self.back_button.show()
+            self.recette_layout.addWidget(recette_card, alignment=Qt.AlignCenter)
 
     def retour_menu(self):
-        self.button1.show()
-        self.button2.show()
-        self.recipe_button.show()
+        self.scroll_area.hide()
+        self.buttons_widget.show()
         self.back_button.hide()
 
-        for i in reversed(range(self.recette_layout.count())):
-            widget = self.recette_layout.itemAt(i).widget()
-            if widget:
-                widget.deleteLater()
+        while self.recette_layout.count() > 1:
+            item = self.recette_layout.takeAt(1)
+            if item.widget():
+                item.widget().deleteLater()
 
     def show_recette_detail(self, recette):
         detail_window = QWidget()
@@ -312,6 +344,7 @@ class MenuPage(QWidget):
         detail_window.setGeometry(500, 300, 400, 600)
         detail_window.show()
         self.detail_window = detail_window
+
 
 
 class FrigoPage(QWidget):
