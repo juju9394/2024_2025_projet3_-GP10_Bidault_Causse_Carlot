@@ -1,10 +1,11 @@
+# testjulian.py
 
 import sys
 import json
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QLineEdit,
-                             QLabel, QFormLayout, QMessageBox, QInputDialog,
-                             QComboBox, QStackedLayout)
+                             QLabel, QMessageBox, QInputDialog, QStackedLayout)
 from PyQt5.QtCore import Qt
+from data_recette import recettes
 
 
 class UserData:
@@ -31,7 +32,6 @@ class UserData:
                 self.ingredients = data.get("ingredients", [])
         except FileNotFoundError:
             pass
-
 
 user_data = UserData()
 
@@ -78,7 +78,7 @@ class BaseWindow(QWidget):
             font-size: 18px;
             padding: 8px;
         }
-    """)
+        """)
 
 
 class MainWindow(BaseWindow):
@@ -108,6 +108,7 @@ class MainWindow(BaseWindow):
     def create_home_page(self):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
+        layout.setSpacing(20)
 
         button1 = QPushButton("Créer un compte")
         button1.clicked.connect(lambda: self.stack_layout.setCurrentIndex(1))
@@ -137,6 +138,7 @@ class AccountCreationPage(QWidget):
 
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
+        layout.setSpacing(20)
 
         self.username_input = QLineEdit()
         self.password_input = QLineEdit()
@@ -167,6 +169,7 @@ class LoginPage(QWidget):
 
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
+        layout.setSpacing(20)
 
         self.username_input = QLineEdit()
         self.password_input = QLineEdit()
@@ -198,41 +201,115 @@ class MenuPage(QWidget):
         super().__init__()
         self.main_window = main_window
 
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        self.layout = QVBoxLayout()
+        self.layout.setAlignment(Qt.AlignCenter)
+        self.layout.setSpacing(25)
 
-        button1 = QPushButton("Ajouter des ingrédients")
-        button1.clicked.connect(self.add_ingredient)
+        self.button1 = QPushButton("Ajouter des ingrédients")
+        self.button1.clicked.connect(self.add_ingredient)
 
-        button2 = QPushButton("Mon Frigo")
-        button2.clicked.connect(self.main_window.go_to_frigo)
+        self.button2 = QPushButton("Mon Frigo")
+        self.button2.clicked.connect(self.main_window.go_to_frigo)
 
         self.recipe_button = QPushButton("Proposer une recette")
         self.recipe_button.clicked.connect(self.proposer_recette)
 
-        layout.addWidget(button1)
-        layout.addWidget(button2)
-        layout.addWidget(self.recipe_button)
+        self.layout.addWidget(self.button1)
+        self.layout.addWidget(self.button2)
+        self.layout.addWidget(self.recipe_button)
 
-        self.setLayout(layout)
+        self.recette_container = QWidget()
+        self.recette_layout = QVBoxLayout()
+        self.recette_layout.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        self.recette_container.setLayout(self.recette_layout)
+
+        self.layout.addWidget(self.recette_container)
+
+        self.back_button = QPushButton("Retour")
+        self.back_button.clicked.connect(self.retour_menu)
+        self.back_button.hide()
+        self.layout.addWidget(self.back_button)
+
+        self.setLayout(self.layout)
 
     def add_ingredient(self):
-      ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
-      if ok and ingredient:
-          quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
-          if ok1:
-              if quantity <= 0:
-                  QMessageBox.warning(self, "Quantité invalide", "La quantité doit être positive.")
-                  return
-              units = ["g", "kg", "unités", "litres", "ml", "cuilleres à soupe", "cuilleres à café"]
-              unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
-              if ok2:
-                  user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
-                  user_data.save_to_file()
-
+        ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
+        if ok and ingredient:
+            quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
+            if ok1 and quantity > 0:
+                units = ["g", "kg", "unités", "litres", "ml", "cuillères à soupe", "cuillères à café"]
+                unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
+                if ok2:
+                    user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
+                    user_data.save_to_file()
 
     def proposer_recette(self):
-        QMessageBox.information(self, "Recette", "Voici une recette que l'IA te proposera ici !")
+        self.button1.hide()
+        self.button2.hide()
+        self.recipe_button.hide()
+
+        for i in reversed(range(self.recette_layout.count())):
+            widget = self.recette_layout.itemAt(i).widget()
+            if widget:
+                widget.deleteLater()
+
+        for recette in recettes:
+            recette_card = QPushButton(f"🍽️ {recette['nom']} \n⏲️ {recette['temps_cuisson']}")
+            recette_card.setStyleSheet("""
+                QPushButton {
+                    background-color: #2a2f4f;
+                    border-radius: 15px;
+                    padding: 20px;
+                    margin: 10px;
+                    text-align: left;
+                    font-size: 16px;
+                    color: #ffffff;
+                    min-width: 400px;
+                    max-width: 500px;
+                }
+                QPushButton:hover {
+                    background-color: #3e497a;
+                }
+            """)
+            recette_card.clicked.connect(lambda _, r=recette: self.show_recette_detail(r))
+            self.recette_layout.addWidget(recette_card)
+
+        self.back_button.show()
+
+    def retour_menu(self):
+        self.button1.show()
+        self.button2.show()
+        self.recipe_button.show()
+        self.back_button.hide()
+
+        for i in reversed(range(self.recette_layout.count())):
+            widget = self.recette_layout.itemAt(i).widget()
+            if widget:
+                widget.deleteLater()
+
+    def show_recette_detail(self, recette):
+        detail_window = QWidget()
+        detail_window.setWindowTitle(f"Recette : {recette['nom']}")
+        layout = QVBoxLayout()
+
+        layout.addWidget(QLabel("<b>🛒 Ingrédients :</b>"))
+        for ingredient, info in recette["ingredients"].items():
+            texte = f"- {ingredient.replace('_', ' ').capitalize()} : {info['quantite']} {info['unite']}"
+            layout.addWidget(QLabel(texte))
+
+        layout.addWidget(QLabel("\n"))
+        layout.addWidget(QLabel("<b>🧑‍🍳 Étapes :</b>"))
+        for i, etape in enumerate(recette["etapes"], start=1):
+            layout.addWidget(QLabel(f"{i}. {etape}"))
+
+        close_button = QPushButton("Fermer")
+        close_button.clicked.connect(detail_window.close)
+        layout.addWidget(close_button)
+
+        detail_window.setLayout(layout)
+        detail_window.setGeometry(500, 300, 400, 600)
+        detail_window.show()
+        self.detail_window = detail_window
 
 
 class FrigoPage(QWidget):
@@ -244,46 +321,40 @@ class FrigoPage(QWidget):
         self.setLayout(self.layout)
 
     def update_ingredients(self):
-      for i in reversed(range(self.layout.count())):
-          widget = self.layout.itemAt(i).widget()
-          if widget:
-             widget.deleteLater()
+        for i in reversed(range(self.layout.count())):
+            widget = self.layout.itemAt(i).widget()
+            if widget:
+                widget.deleteLater()
 
-      self.layout.addWidget(QLabel("Ingrédients dans mon frigo:"))
+        self.layout.addWidget(QLabel("Ingrédients dans mon frigo:"))
+        sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
 
-     # --> TRIER LES INGRÉDIENTS AVANT L'AFFICHAGE
-      sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
+        for ingredient in sorted_ingredients:
+            label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
+            self.layout.addWidget(label)
 
-      for ingredient in sorted_ingredients:
-          label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
-          self.layout.addWidget(label)
+        remove_button = QPushButton("Retirer un ingrédient")
+        remove_button.clicked.connect(self.remove_ingredient)
+        self.layout.addWidget(remove_button)
 
-      remove_button = QPushButton("Retirer un ingrédient")
-      remove_button.clicked.connect(self.remove_ingredient)
-      self.layout.addWidget(remove_button)
-
-      back_button = QPushButton("Retour au menu")
-      back_button.clicked.connect(self.main_window.go_to_menu)
-      self.layout.addWidget(back_button)
-
+        back_button = QPushButton("Retour au menu")
+        back_button.clicked.connect(self.main_window.go_to_menu)
+        self.layout.addWidget(back_button)
 
     def remove_ingredient(self):
-      if not user_data.ingredients:
-          QMessageBox.information(self, "Info", "Aucun ingrédient à retirer.")
-          return
+        if not user_data.ingredients:
+            QMessageBox.information(self, "Info", "Aucun ingrédient à retirer.")
+            return
 
-    # --> TRIER LES INGRÉDIENTS AVANT LA SÉLECTION
-      sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
-
-      items = [f"{i['name']} ({i['quantity']} {i['unit']})" for i in sorted_ingredients]
-      item, ok = QInputDialog.getItem(self, "Retirer un ingrédient", "Sélectionnez un ingrédient:", items, 0, False)
-      if ok and item:
-          index = items.index(item)
-          # Retirer l'ingrédient du tableau trié, donc il faut retrouver l'original dans user_data.ingredients
-          ingredient_to_remove = sorted_ingredients[index]
-          user_data.ingredients.remove(ingredient_to_remove)
-          user_data.save_to_file()
-          self.update_ingredients()
+        sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
+        items = [f"{i['name']} ({i['quantity']} {i['unit']})" for i in sorted_ingredients]
+        item, ok = QInputDialog.getItem(self, "Retirer un ingrédient", "Sélectionnez un ingrédient:", items, 0, False)
+        if ok and item:
+            index = items.index(item)
+            ingredient_to_remove = sorted_ingredients[index]
+            user_data.ingredients.remove(ingredient_to_remove)
+            user_data.save_to_file()
+            self.update_ingredients()
 
 
 def main():
@@ -295,3 +366,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
