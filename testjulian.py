@@ -242,6 +242,8 @@ class MenuPage(QWidget):
                 if ok2:
                     user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
                     user_data.save_to_file()
+            else:
+                QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")        
 
     def proposer_recette(self):
         self.button1.hide()
