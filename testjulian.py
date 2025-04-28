@@ -217,15 +217,19 @@ class MenuPage(QWidget):
         self.setLayout(layout)
 
     def add_ingredient(self):
-        ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
-        if ok and ingredient:
-            quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
-            if ok1:
-                units = ["g", "kg", "unités","litres", "ml","cuilleres à soupe", "cuilleres à café"]
-                unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
-                if ok2:
-                    user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
-                    user_data.save_to_file()
+      ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
+      if ok and ingredient:
+          quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
+          if ok1:
+              if quantity <= 0:
+                  QMessageBox.warning(self, "Quantité invalide", "La quantité doit être positive.")
+                  return
+              units = ["g", "kg", "unités", "litres", "ml", "cuilleres à soupe", "cuilleres à café"]
+              unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
+              if ok2:
+                  user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
+                  user_data.save_to_file()
+
 
     def proposer_recette(self):
         QMessageBox.information(self, "Recette", "Voici une recette que l'IA te proposera ici !")
