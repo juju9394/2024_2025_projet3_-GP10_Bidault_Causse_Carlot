@@ -2,6 +2,7 @@ recettes = [
     {
         "nom": "Filet mignon en croûte",
         "temps_cuisson": "65 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "filet_mignon": {"quantite": "1 filet mignon de porc d'environ 600g", "unite": "g"},
             "huile_olive": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe"},
@@ -33,6 +34,7 @@ recettes = [
     {
         "nom": "Quiche saumon-épinards",
         "temps_cuisson": "35 minutes",
+        "personnes": 6,  # Ajout du nombre de personnes
         "ingredients": {
             "pate_brisee": {"quantite": "1", "unite": ""},
             "saumon": {"quantite": "300", "unite": "g"},
@@ -61,6 +63,7 @@ recettes = [
     {
         "nom": "Dos de cabillaud au four",
         "temps_cuisson": "35 minutes",
+        "personnes": 2,  # Ajout du nombre de personnes
         "ingredients": {
             "dos_cabillaud": {"quantite": "400", "unite": "g"},
             "huile_olive": {"quantite": "4 cuillères à soupe", "unite": "cuillères à soupe"},
@@ -81,6 +84,7 @@ recettes = [
     {
         "nom": "Blanc de poulet au four",
         "temps_cuisson": "45 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "blancs_poulet": {"quantite": "400", "unite": "g"},
             "huile_olive": {"quantite": "3 cuillères à soupe", "unite": "cuillères à soupe"},
@@ -100,13 +104,13 @@ recettes = [
     {
         "nom": "Pâtes carbonara express",
         "temps_cuisson": "20 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "pates": {"quantite": "400", "unite": "g"},
             "lardons": {"quantite": "150", "unite": "g"},
             "creme_fraiche": {"quantite": "20", "unite": "cl"},
             "oeufs": {"quantite": "2", "unite": ""},
-            "parmesan": {"quantite": "50", "unite": "g"},
-            
+            "parmesan": {"quantite": "50", "unite": "g"}
         },
         "etapes": [
             "Cuire les pâtes dans de l'eau bouillante salée.",
@@ -119,6 +123,7 @@ recettes = [
     {
         "nom": "Salade de riz",
         "temps_cuisson": "25 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "riz": {"quantite": "200", "unite": "g"},
             "thon": {"quantite": "1 boite", "unite": ""},
@@ -138,13 +143,13 @@ recettes = [
     {
         "nom": "Omelette aux fines herbes",
         "temps_cuisson": "10 minutes",
+        "personnes": 2,  # Ajout du nombre de personnes
         "ingredients": {
             "oeufs": {"quantite": "4", "unite": ""},
             "lait": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe"},
             "ciboulette": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"},
             "persil": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"},
-            "beurre": {"quantite": "10", "unite": "g"},
-            
+            "beurre": {"quantite": "10", "unite": "g"}
         },
         "etapes": [
             "Battre les œufs avec le lait.",
@@ -157,13 +162,13 @@ recettes = [
     {
         "nom": "Gratin de courgettes",
         "temps_cuisson": "40 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "courgettes": {"quantite": "4", "unite": ""},
             "creme_fraiche": {"quantite": "20", "unite": "cl"},
             "gruyere_rape": {"quantite": "100", "unite": "g"},
             "ail": {"quantite": "2 gousses", "unite": ""},
-            "huile_olive": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"},
-            
+            "huile_olive": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"}
         },
         "etapes": [
             "Préchauffer le four à 180°C.",
@@ -177,6 +182,7 @@ recettes = [
     {
         "nom": "Croque-monsieur",
         "temps_cuisson": "15 minutes",
+        "personnes": 2,  # Ajout du nombre de personnes
         "ingredients": {
             "pain_de_mie": {"quantite": "8 tranches", "unite": ""},
             "jambon": {"quantite": "4 tranches", "unite": ""},
@@ -196,13 +202,13 @@ recettes = [
     {
         "nom": "Soupe de légumes maison",
         "temps_cuisson": "45 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "pommes_de_terre": {"quantite": "3", "unite": ""},
             "carottes": {"quantite": "3", "unite": ""},
             "poireaux": {"quantite": "2", "unite": ""},
             "courgette": {"quantite": "1", "unite": ""},
-            "bouillon_legumes": {"quantite": "1 litre", "unite": "l"},
-            
+            "bouillon_legumes": {"quantite": "1 litre", "unite": "l"}
         },
         "etapes": [
             "Éplucher et couper tous les légumes en morceaux.",
@@ -216,18 +222,19 @@ recettes = [
     {
         "nom": "Gnocchis à la poêle",
         "temps_cuisson": "15 minutes",
+        "personnes": 4,  # Ajout du nombre de personnes
         "ingredients": {
             "gnocchis": {"quantite": "500", "unite": "g"},
             "beurre": {"quantite": "30", "unite": "g"},
             "ail": {"quantite": "2 gousses", "unite": ""},
-            "parmesan": {"quantite": "50", "unite": "g"},
-            "persil": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"}
+            "parmesan": {"quantite": "50", "unite": "g"}
         },
         "etapes": [
-            "Faire cuire les gnocchis selon les instructions du paquet.",
-            "Égoutter et faire revenir les gnocchis dans une poêle avec du beurre et de l'ail émincé.",
-            "Quand ils sont dorés, saupoudrer de parmesan et de persil.",
-            "Servir bien chaud."
+            "Cuire les gnocchis selon les indications du paquet.",
+            "Faire fondre le beurre dans une poêle.",
+            "Ajouter l'ail émincé et faire revenir.",
+            "Ajouter les gnocchis et les faire dorer.",
+            "Parsemer de parmesan râpé avant de servir."
         ]
     }
 ]
