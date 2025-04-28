@@ -244,36 +244,46 @@ class FrigoPage(QWidget):
         self.setLayout(self.layout)
 
     def update_ingredients(self):
-        for i in reversed(range(self.layout.count())):
-            widget = self.layout.itemAt(i).widget()
-            if widget:
-                widget.deleteLater()
+      for i in reversed(range(self.layout.count())):
+          widget = self.layout.itemAt(i).widget()
+          if widget:
+             widget.deleteLater()
 
-        self.layout.addWidget(QLabel("Ingrédients dans mon frigo:"))
-        for ingredient in user_data.ingredients:
-            label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
-            self.layout.addWidget(label)
+      self.layout.addWidget(QLabel("Ingrédients dans mon frigo:"))
 
-        remove_button = QPushButton("Retirer un ingrédient")
-        remove_button.clicked.connect(self.remove_ingredient)
-        self.layout.addWidget(remove_button)
+     # --> TRIER LES INGRÉDIENTS AVANT L'AFFICHAGE
+      sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
 
-        back_button = QPushButton("Retour au menu")
-        back_button.clicked.connect(self.main_window.go_to_menu)
-        self.layout.addWidget(back_button)
+      for ingredient in sorted_ingredients:
+          label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
+          self.layout.addWidget(label)
+
+      remove_button = QPushButton("Retirer un ingrédient")
+      remove_button.clicked.connect(self.remove_ingredient)
+      self.layout.addWidget(remove_button)
+
+      back_button = QPushButton("Retour au menu")
+      back_button.clicked.connect(self.main_window.go_to_menu)
+      self.layout.addWidget(back_button)
+
 
     def remove_ingredient(self):
-        if not user_data.ingredients:
-            QMessageBox.information(self, "Info", "Aucun ingrédient à retirer.")
-            return
+      if not user_data.ingredients:
+          QMessageBox.information(self, "Info", "Aucun ingrédient à retirer.")
+          return
 
-        items = [f"{i['name']} ({i['quantity']} {i['unit']})" for i in user_data.ingredients]
-        item, ok = QInputDialog.getItem(self, "Retirer un ingrédient", "Sélectionnez un ingrédient:", items, 0, False)
-        if ok and item:
-            index = items.index(item)
-            del user_data.ingredients[index]
-            user_data.save_to_file()
-            self.update_ingredients()
+    # --> TRIER LES INGRÉDIENTS AVANT LA SÉLECTION
+      sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
+
+      items = [f"{i['name']} ({i['quantity']} {i['unit']})" for i in sorted_ingredients]
+      item, ok = QInputDialog.getItem(self, "Retirer un ingrédient", "Sélectionnez un ingrédient:", items, 0, False)
+      if ok and item:
+          index = items.index(item)
+          # Retirer l'ingrédient du tableau trié, donc il faut retrouver l'original dans user_data.ingredients
+          ingredient_to_remove = sorted_ingredients[index]
+          user_data.ingredients.remove(ingredient_to_remove)
+          user_data.save_to_file()
+          self.update_ingredients()
 
 
 def main():
