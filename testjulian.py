@@ -277,39 +277,44 @@ class MenuPage(QWidget):
                 QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")
 
     def proposer_recette(self):
-        # Cacher boutons principaux
-        self.buttons_widget.hide()
+    # Cacher les boutons principaux
+      self.buttons_widget.hide()
 
-        self.scroll_area.show()
+    # Afficher la zone de scroll
+      self.scroll_area.show()
 
-        # Nettoyer les anciennes cartes sauf le bouton retour
-        while self.recette_layout.count() > 1:
-            item = self.recette_layout.takeAt(1)
-            if item.widget():
-                item.widget().deleteLater()
+    # Nettoyer les anciennes cartes sauf le bouton retour
+      while self.recette_layout.count() > 1:
+          item = self.recette_layout.takeAt(1)
+          if item.widget():
+              item.widget().deleteLater()
 
-        self.back_button.show()
+      self.back_button.show()
 
-        for recette in recettes:
-            recette_card = QPushButton(f"🍽️ {recette['nom']} \n⏲️ {recette['temps_cuisson']}")
-            recette_card.setStyleSheet("""
-                QPushButton {
-                    background-color: #2a2f4f;
-                    border-radius: 15px;
-                    padding: 20px;
-                    margin: 10px;
-                    text-align: left;
-                    font-size: 16px;
-                    color: #ffffff;
-                    min-width: 400px;
-                    max-width: 500px;
-                }
-                QPushButton:hover {
-                    background-color: #3e497a;
-                }
-            """)
-            recette_card.clicked.connect(lambda _, r=recette: self.show_recette_detail(r))
-            self.recette_layout.addWidget(recette_card, alignment=Qt.AlignCenter)
+      for recette in recettes:
+        # Créer un texte qui inclut le nombre de personnes
+          recette_text = f"🍽️ {recette['nom']} \n⏲️ {recette['temps_cuisson']} \n👥 {recette['personnes']} personnes"
+        
+          recette_card = QPushButton(recette_text)
+          recette_card.setStyleSheet("""
+              QPushButton {
+                  background-color: #2a2f4f;
+                  border-radius: 15px;
+                  padding: 20px;
+                  margin: 10px;
+                  text-align: left;
+                  font-size: 16px;
+                  color: #ffffff;
+                  min-width: 400px;
+                  max-width: 500px;
+              }
+              QPushButton:hover {
+                  background-color: #3e497a;
+             }
+          """)
+          recette_card.clicked.connect(lambda _, r=recette: self.show_recette_detail(r))
+          self.recette_layout.addWidget(recette_card, alignment=Qt.AlignCenter)
+
 
     def retour_menu(self):
         self.scroll_area.hide()
