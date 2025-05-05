@@ -1,5 +1,10 @@
 #Data aliments
 
+
+import re
+
+
+
 aliments = {
     "fruits": [
         "pomme", "banane", "orange", "fraise", "raisin", "kiwi", "poire", "abricot", 
@@ -46,3 +51,29 @@ aliments = {
         "vinaigre", "huile d'olive", "huile de tournesol", "sauce soja", "ketchup", "mayonnaise"
     ]
 }
+# Fonction pour extraire les mots présents dans le dictionnaire des aliments
+def extraire_aliments_texte(texte, dictionnaire):
+    # Convertir le texte en minuscule pour que la comparaison soit insensible à la casse
+    texte = texte.lower()
+    
+    # Nettoyage du texte : retirer la ponctuation et découper en mots
+    mots_texte = re.findall(r'\b\w+\b', texte)
+
+    # Créer un set de tous les mots dans le dictionnaire
+    aliments_set = set()
+    for categorie, aliments in dictionnaire.items():
+        aliments_set.update([aliment.lower() for aliment in aliments])
+
+    # Trouver les mots du texte qui sont dans le dictionnaire
+    mots_trouves = [mot for mot in mots_texte if mot in aliments_set]
+    
+    return mots_trouves
+
+# Exemple de texte à analyser
+texte = "J'ai acheté des pommes, des tomates, du riz, du poulet et du chocolat pour faire un bon dîner."
+
+# Extraction des mots présents dans le texte
+mots_aliments = extraire_aliments_texte(texte, aliments)
+
+print("Mots trouvés dans le texte :")
+print(mots_aliments)
