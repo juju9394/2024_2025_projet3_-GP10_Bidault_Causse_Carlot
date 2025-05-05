@@ -1,5 +1,3 @@
-# testjulian.py
-
 import sys
 import json
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QLineEdit,
@@ -327,28 +325,64 @@ class MenuPage(QWidget):
                 item.widget().deleteLater()
 
     def show_recette_detail(self, recette):
-        detail_window = QWidget()
-        detail_window.setWindowTitle(f"Recette : {recette['nom']}")
-        layout = QVBoxLayout()
+      detail_window = QWidget()
+      detail_window.setWindowTitle(f"Recette : {recette['nom']}")
+      layout = QVBoxLayout()
 
-        layout.addWidget(QLabel("<b>🛒 Ingrédients :</b>"))
-        for ingredient, info in recette["ingredients"].items():
-            texte = f"- {ingredient.replace('_', ' ').capitalize()} : {info['quantite']} {info['unite']}"
-            layout.addWidget(QLabel(texte))
+      layout.addWidget(QLabel("<b>🛒 Ingrédients :</b>"))
+      for ingredient, info in recette["ingredients"].items():
+          texte = f"- {ingredient.replace('_', ' ').capitalize()} : {info['quantite']} {info['unite']}"
+          layout.addWidget(QLabel(texte))
 
-        layout.addWidget(QLabel("\n"))
-        layout.addWidget(QLabel("<b>🧑‍🍳 Étapes :</b>"))
-        for i, etape in enumerate(recette["etapes"], start=1):
-            layout.addWidget(QLabel(f"{i}. {etape}"))
+      layout.addWidget(QLabel("\n"))
+      layout.addWidget(QLabel("<b>🧑‍🍳 Étapes :</b>"))
+      for i, etape in enumerate(recette["etapes"], start=1):
+          layout.addWidget(QLabel(f"{i}. {etape}"))
 
-        close_button = QPushButton("Fermer")
-        close_button.clicked.connect(detail_window.close)
-        layout.addWidget(close_button)
+      def valider_recette():
+          manquants = []
+          for ing, info in recette["ingredients"].items():
+              ing_normalise = ing.lower().replace("_", " ")
+              found = False
+              for stock in user_data.ingredients:
+                  if stock["name"].lower() == ing_normalise and stock["unit"] == info["unite"]:
+                      if stock["quantity"] >= info["quantite"]:
+                          found = True
+                          break
+              if not found:
+                  manquants.append(ing_normalise)
 
-        detail_window.setLayout(layout)
-        detail_window.setGeometry(500, 300, 400, 600)
-        detail_window.show()
-        self.detail_window = detail_window
+          if manquants:
+              QMessageBox.warning(detail_window, "Ingrédients manquants", f"Ingrédients insuffisants : {', '.join(manquants)}")
+              return
+
+        # Retirer les ingrédients
+          for ing, info in recette["ingredients"].items():
+              ing_normalise = ing.lower().replace("_", " ")
+              for stock in user_data.ingredients:
+                  if stock["name"].lower() == ing_normalise and stock["unit"] == info["unite"]:
+                      stock["quantity"] -= info["quantite"]
+                      if stock["quantity"] <= 0:
+                          user_data.ingredients.remove(stock)
+                      break
+ 
+          user_data.save_to_file()
+          QMessageBox.information(detail_window, "Succès", "Recette validée et ingrédients mis à jour !")
+          detail_window.close()
+
+      valider_button = QPushButton("Valider la recette")
+      valider_button.clicked.connect(valider_recette)
+      layout.addWidget(valider_button)
+
+      close_button = QPushButton("Fermer")
+      close_button.clicked.connect(detail_window.close)
+      layout.addWidget(close_button)
+
+      detail_window.setLayout(layout)
+      detail_window.setGeometry(500, 300, 400, 600)
+      detail_window.show()
+      self.detail_window = detail_window
+
 
 
 
