@@ -6,6 +6,7 @@ from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Reshape, LSTM, Dense, Dropout
 from keras.layers import Bidirectional
 import os
+import pytesseract
 
 # Fonction pour charger et prétraiter les images
 def preprocess_image(image_path, target_size=(128, 128)):
@@ -83,24 +84,25 @@ def train_model(images, encoded_labels, model):
     # Entraîner le modèle
     model.fit(X_train, y_train, batch_size=32, epochs=10)
 
-# Fonction principale
-def main():
-    # Répertoire des images et fichier des étiquettes
-    image_folder = 'images/'  # Dossier des images
-    labels_file = 'labels.csv'  # Fichier CSV des étiquettes
+# # Fonction principale
+# def main():
+#     # Répertoire des images et fichier des étiquettes
+#     image_folder = 'images/'  # Dossier des images
+#     labels_file = 'labels.csv'  # Fichier CSV des étiquettes
     
-    # Charger les données
-    images, encoded_labels, encoder = load_data(image_folder, labels_file)
+#     # Charger les données
+#     images, encoded_labels, encoder = load_data(image_folder, labels_file)
     
-    # Créer le modèle CRNN
-    model = create_crnn_model(input_shape=(128, 128, 1), num_classes=len(encoder.classes_))
+#     # Créer le modèle CRNN
+#     model = create_crnn_model(input_shape=(128, 128, 1), num_classes=len(encoder.classes_))
     
-    # Entraîner le modèle
-    train_model(images, encoded_labels, model)
+#     # Entraîner le modèle
+#     train_model(images, encoded_labels, model)
     
-    # Sauvegarder le modèle
-    model.save('ocr_model.h5')
+#     # Sauvegarder le modèle
+#     model.save('ocr_model.h5')
 
-# Lancer le programme
-if __name__ == '__main__':
-    main()
+# # Lancer le programme
+0
+
+
