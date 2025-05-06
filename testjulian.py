@@ -368,7 +368,8 @@ class MenuPage(QWidget):
  
           user_data.save_to_file()
           QMessageBox.information(detail_window, "Succès", "Recette validée et ingrédients mis à jour !")
-          detail_window.close()
+          self.main_window.frigo_widget.update_ingredients()
+
 
       valider_button = QPushButton("Valider la recette")
       valider_button.clicked.connect(valider_recette)
