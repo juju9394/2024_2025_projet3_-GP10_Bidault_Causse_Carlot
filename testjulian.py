@@ -357,7 +357,8 @@ class MenuPage(QWidget):
     def valider_recette(self, recette, detail_window):
         manquants = []
         for ing, info in recette["ingredients"].items():
-            if not info.get("importance", True):  # Si ce n'est pas important, on ignore
+            # Vérifier uniquement les ingrédients avec un coefficient d'importance > 0.8
+            if info.get("importance", 0) <= 0.8:
                 continue
 
             ing_normalise = ing.lower().replace("_", " ")
@@ -376,7 +377,7 @@ class MenuPage(QWidget):
 
         # Retirer les ingrédients importants
         for ing, info in recette["ingredients"].items():
-            if not info.get("importance", True):
+            if info.get("importance", 0) <= 0.8:
                 continue
 
             ing_normalise = ing.lower().replace("_", " ")
