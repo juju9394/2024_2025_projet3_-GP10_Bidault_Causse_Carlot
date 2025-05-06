@@ -1,20 +1,21 @@
+
 recettes = [
     {
         "nom": "Filet mignon en croûte",
         "temps_cuisson": "65 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "filet_mignon": {"quantite": "1 filet mignon de porc d'environ 600g", "unite": "g"},
-            "huile_olive": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe"},
-            "champignons": {"quantite": "250", "unite": "g"},
-            "echalotes": {"quantite": "2", "unite": ""},
-            "ail": {"quantite": "2 gousses", "unite": ""},
-            "persil": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe"},
-            "beurre": {"quantite": "30", "unite": "g"},
-            "pate_feuilletee": {"quantite": "1", "unite": ""},
-            "jambon_cru": {"quantite": "4 tranches", "unite": ""},
-            "jaune_oeuf": {"quantite": "1", "unite": ""},
-            "moutarde": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"}
+            "filet_mignon": {"quantite": "1 filet mignon de porc d'environ 600g", "unite": "g", "importance": 1.0},
+            "huile_olive": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.7},
+            "champignons": {"quantite": "250", "unite": "g", "importance": 0.8},
+            "echalotes": {"quantite": "2", "unite": "", "importance": 0.6},
+            "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.6},
+            "persil": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.5},
+            "beurre": {"quantite": "30", "unite": "g", "importance": 0.6},
+            "pate_feuilletee": {"quantite": "1", "unite": "", "importance": 0.9},
+            "jambon_cru": {"quantite": "4 tranches", "unite": "", "importance": 0.8},
+            "jaune_oeuf": {"quantite": "1", "unite": "", "importance": 0.7},
+            "moutarde": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.7}
         },
         "etapes": [
             "Sortir le filet mignon du réfrigérateur 30 minutes avant la préparation.",
@@ -34,18 +35,18 @@ recettes = [
     {
         "nom": "Quiche saumon-épinards",
         "temps_cuisson": "35 minutes",
-        "personnes": 6,  # Ajout du nombre de personnes
+        "personnes": 6,
         "ingredients": {
-            "pate_brisee": {"quantite": "1", "unite": ""},
-            "saumon": {"quantite": "300", "unite": "g"},
-            "epinards": {"quantite": "400", "unite": "g"},
-            "oeufs": {"quantite": "3", "unite": ""},
-            "creme_fraiche": {"quantite": "20", "unite": "cl"},
-            "lait": {"quantite": "10", "unite": "cl"},
-            "oignon": {"quantite": "1", "unite": ""},
-            "ail": {"quantite": "2 gousses", "unite": ""},
-            "gruyere": {"quantite": "100", "unite": "g"},
-            "beurre": {"quantite": "1 noix", "unite": ""}
+            "pate_brisee": {"quantite": "1", "unite": "", "importance": 0.9},
+            "saumon": {"quantite": "300", "unite": "g", "importance": 1.0},
+            "epinards": {"quantite": "400", "unite": "g", "importance": 0.8},
+            "oeufs": {"quantite": "3", "unite": "", "importance": 1.0},
+            "creme_fraiche": {"quantite": "20", "unite": "cl", "importance": 0.7},
+            "lait": {"quantite": "10", "unite": "cl", "importance": 0.6},
+            "oignon": {"quantite": "1", "unite": "", "importance": 0.6},
+            "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.5},
+            "gruyere": {"quantite": "100", "unite": "g", "importance": 0.8},
+            "beurre": {"quantite": "1 noix", "unite": "", "importance": 0.6}
         },
         "etapes": [
             "Préchauffer le four à 180°C.",
@@ -63,14 +64,14 @@ recettes = [
     {
         "nom": "Dos de cabillaud au four",
         "temps_cuisson": "35 minutes",
-        "personnes": 2,  # Ajout du nombre de personnes
+        "personnes": 2,
         "ingredients": {
-            "dos_cabillaud": {"quantite": "400", "unite": "g"},
-            "huile_olive": {"quantite": "4 cuillères à soupe", "unite": "cuillères à soupe"},
-            "citrons": {"quantite": "2", "unite": ""},
-            "thym": {"quantite": "2", "unite": "g"},
-            "romarin": {"quantite": "2", "unite": "g"},
-            "ail": {"quantite": "2 gousses", "unite": ""}
+            "dos_cabillaud": {"quantite": "400", "unite": "g", "importance": 1.0},
+            "huile_olive": {"quantite": "4 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.7},
+            "citrons": {"quantite": "2", "unite": "", "importance": 0.8},
+            "thym": {"quantite": "2", "unite": "g", "importance": 0.6},
+            "romarin": {"quantite": "2", "unite": "g", "importance": 0.6},
+            "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.7}
         },
         "etapes": [
             "Préchauffer le four à 180°C chaleur tournante.",
@@ -84,13 +85,13 @@ recettes = [
     {
         "nom": "Blanc de poulet au four",
         "temps_cuisson": "45 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "blancs_poulet": {"quantite": "400", "unite": "g"},
-            "huile_olive": {"quantite": "3 cuillères à soupe", "unite": "cuillères à soupe"},
-            "herbes_provence": {"quantite": "2 cuillères à café", "unite": "cuillères à café"},
-            "ail": {"quantite": "2 gousses", "unite": ""},
-            "citron": {"quantite": "1", "unite": ""}
+            "blancs_poulet": {"quantite": "400", "unite": "g", "importance": 1.0},
+            "huile_olive": {"quantite": "3 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.7},
+            "herbes_provence": {"quantite": "2 cuillères à café", "unite": "cuillères à café", "importance": 0.6},
+            "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.6},
+            "citron": {"quantite": "1", "unite": "", "importance": 0.7}
         },
         "etapes": [
             "Préchauffer le four à 180°C.",
@@ -104,13 +105,13 @@ recettes = [
     {
         "nom": "Pâtes carbonara express",
         "temps_cuisson": "20 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "pates": {"quantite": "400", "unite": "g"},
-            "lardons": {"quantite": "150", "unite": "g"},
-            "creme_fraiche": {"quantite": "20", "unite": "cl"},
-            "oeufs": {"quantite": "2", "unite": ""},
-            "parmesan": {"quantite": "50", "unite": "g"}
+            "pates": {"quantite": "400", "unite": "g", "importance": 1.0},
+            "lardons": {"quantite": "150", "unite": "g", "importance": 0.8},
+            "creme_fraiche": {"quantite": "20", "unite": "cl", "importance": 0.7},
+            "oeufs": {"quantite": "2", "unite": "", "importance": 1.0},
+            "parmesan": {"quantite": "50", "unite": "g", "importance": 0.8}
         },
         "etapes": [
             "Cuire les pâtes dans de l'eau bouillante salée.",
@@ -123,14 +124,14 @@ recettes = [
     {
         "nom": "Salade de riz",
         "temps_cuisson": "25 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "riz": {"quantite": "200", "unite": "g"},
-            "thon": {"quantite": "1 boite", "unite": ""},
-            "mais": {"quantite": "1 petite boite", "unite": ""},
-            "tomates": {"quantite": "2", "unite": ""},
-            "oeuf": {"quantite": "2", "unite": ""},
-            "vinaigrette": {"quantite": "selon le gout", "unite": ""}
+            "riz": {"quantite": "200", "unite": "g", "importance": 1.0},
+            "thon": {"quantite": "1 boite", "unite": "", "importance": 0.8},
+            "mais": {"quantite": "1 petite boite", "unite": "", "importance": 0.7},
+            "tomates": {"quantite": "2", "unite": "", "importance": 0.6},
+            "oeuf": {"quantite": "2", "unite": "", "importance": 0.7},
+            "vinaigrette": {"quantite": "selon le gout", "unite": "", "importance": 0.5}
         },
         "etapes": [
             "Cuire le riz et laisser refroidir.",
@@ -143,52 +144,51 @@ recettes = [
     {
         "nom": "Omelette aux fines herbes",
         "temps_cuisson": "10 minutes",
-        "personnes": 2,  # Ajout du nombre de personnes
+        "personnes": 2,
         "ingredients": {
-            "oeufs": {"quantite": "4", "unite": ""},
-            "lait": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe"},
-            "ciboulette": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"},
-            "persil": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"},
-            "beurre": {"quantite": "10", "unite": "g"}
+            "oeufs": {"quantite": "4", "unite": "", "importance": 1.0},
+            "lait": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.6},
+            "ciboulette": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.7},
+            "persil": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.7},
+            "beurre": {"quantite": "1 noix", "unite": "", "importance": 0.5}
         },
         "etapes": [
-            "Battre les œufs avec le lait.",
-            "Ajouter les fines herbes ciselées.",
-            "Faire fondre le beurre dans une poêle chaude.",
-            "Verser le mélange d'œufs et cuire à feu doux sans cesser de remuer.",
-            "Servir immédiatement."
+            "Battre les œufs avec le lait et les herbes.",
+            "Faire chauffer le beurre dans une poêle.",
+            "Verser le mélange et cuire jusqu'à ce que l'omelette soit prise.",
+            "Servir chaud."
         ]
     },
     {
         "nom": "Gratin de courgettes",
         "temps_cuisson": "40 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "courgettes": {"quantite": "4", "unite": ""},
-            "creme_fraiche": {"quantite": "20", "unite": "cl"},
-            "gruyere_rape": {"quantite": "100", "unite": "g"},
-            "ail": {"quantite": "2 gousses", "unite": ""},
-            "huile_olive": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe"}
+            "courgettes": {"quantite": "4", "unite": "", "importance": 1.0},
+            "creme_fraiche": {"quantite": "20", "unite": "cl", "importance": 0.8},
+            "gruyere_rape": {"quantite": "100", "unite": "g", "importance": 0.9},
+            "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.7},
+            "huile_olive": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.6}
         },
         "etapes": [
             "Préchauffer le four à 180°C.",
             "Couper les courgettes en rondelles fines.",
             "Faire revenir les courgettes avec l'ail dans un peu d'huile d'olive.",
             "Déposer les courgettes dans un plat à gratin.",
-            "Ajouter la crème fraîche ,parsemer de gruyère râpé.",
+            "Ajouter la crème fraîche, parsemer de gruyère râpé.",
             "Enfourner 20 à 25 minutes jusqu'à doré."
         ]
     },
     {
         "nom": "Croque-monsieur",
         "temps_cuisson": "15 minutes",
-        "personnes": 2,  # Ajout du nombre de personnes
+        "personnes": 2,
         "ingredients": {
-            "pain_de_mie": {"quantite": "8 tranches", "unite": ""},
-            "jambon": {"quantite": "4 tranches", "unite": ""},
-            "gruyere_rape": {"quantite": "100", "unite": "g"},
-            "bechamel": {"quantite": "200", "unite": "ml"},
-            "beurre": {"quantite": "20", "unite": "g"}
+            "pain_de_mie": {"quantite": "8 tranches", "unite": "", "importance": 0.9},
+            "jambon": {"quantite": "4 tranches", "unite": "", "importance": 0.8},
+            "gruyere_rape": {"quantite": "100", "unite": "g", "importance": 0.9},
+            "bechamel": {"quantite": "200", "unite": "ml", "importance": 0.7},
+            "beurre": {"quantite": "20", "unite": "g", "importance": 0.6}
         },
         "etapes": [
             "Préchauffer le four à 200°C.",
@@ -202,13 +202,13 @@ recettes = [
     {
         "nom": "Soupe de légumes maison",
         "temps_cuisson": "45 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "pommes_de_terre": {"quantite": "3", "unite": ""},
-            "carottes": {"quantite": "3", "unite": ""},
-            "poireaux": {"quantite": "2", "unite": ""},
-            "courgette": {"quantite": "1", "unite": ""},
-            "bouillon_legumes": {"quantite": "1 litre", "unite": "l"}
+            "pommes_de_terre": {"quantite": "3", "unite": "", "importance": 0.8},
+            "carottes": {"quantite": "3", "unite": "", "importance": 0.8},
+            "poireaux": {"quantite": "2", "unite": "", "importance": 0.7},
+            "courgette": {"quantite": "1", "unite": "", "importance": 0.7},
+            "bouillon_legumes": {"quantite": "1 litre", "unite": "l", "importance": 1.0}
         },
         "etapes": [
             "Éplucher et couper tous les légumes en morceaux.",
@@ -222,12 +222,12 @@ recettes = [
     {
         "nom": "Gnocchis à la poêle",
         "temps_cuisson": "15 minutes",
-        "personnes": 4,  # Ajout du nombre de personnes
+        "personnes": 4,
         "ingredients": {
-            "gnocchis": {"quantite": "500", "unite": "g"},
-            "beurre": {"quantite": "30", "unite": "g"},
-            "ail": {"quantite": "2 gousses", "unite": ""},
-            "parmesan": {"quantite": "50", "unite": "g"}
+            "gnocchis": {"quantite": "500", "unite": "g", "importance": 1.0},
+            "beurre": {"quantite": "30", "unite": "g", "importance": 0.8},
+            "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.7},
+            "parmesan": {"quantite": "50", "unite": "g", "importance": 0.9}
         },
         "etapes": [
             "Cuire les gnocchis selon les indications du paquet.",
@@ -238,3 +238,7 @@ recettes = [
         ]
     }
 ]
+
+
+
+
