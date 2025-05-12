@@ -226,6 +226,7 @@ test_images = test_generator.flow_from_dataframe(
 
     inputs = pretrained_model.input
 
+
 x = tf.keras.layers.Dense(128, activation='relu')(pretrained_model.output)
 x = tf.keras.layers.Dense(128, activation='relu')(x)
 
@@ -251,4 +252,5 @@ history = model.fit(
             restore_best_weights=True
               )
     ]
+)
 )
