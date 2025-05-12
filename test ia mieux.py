@@ -7,7 +7,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from Data_ingredients import*
+from Data_ingredients import *
+
 # 1. Extraire le texte de l'image avec Tesseract OCR
 def extraire_texte_image(image_path):
     img = Image.open(image_path)
@@ -49,12 +50,10 @@ def mettre_a_jour_base_de_donnees(mots, categories):
     cursor = conn.cursor()
 
     # Créer la table si elle n'existe pas
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS aliments (
+    cursor.execute('''CREATE TABLE IF NOT EXISTS aliments (
         nom TEXT,
         categorie TEXT
-    )
-    ''')
+    )''')
 
     # Insérer les mots et leurs catégories
     for mot, categorie in zip(mots, categories):
@@ -69,6 +68,10 @@ def traiter_ticket(image_path, data):
     # Extraire et nettoyer le texte de l'image
     texte = extraire_texte_image(image_path)
     texte_nettoye = nettoyage_texte(texte)
+    
+    # Afficher le texte extrait
+    print("Texte extrait de l'image:")
+    print(texte_nettoye)
     
     # Extraire les mots du texte
     mots_du_ticket = texte_nettoye.split()
@@ -95,11 +98,6 @@ def importer_donnees(fichier_path):
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    image_path = 'ticket_de_caisse.jpg'  # Remplace par le chemin de ton image
-    fichier_donnees = 'nvbase.csv'  # Remplace par le chemin de ton fichier CSV contenant les aliments et catégories
-
-    # Importer les données
-    data = importer_donnees(fichier_donnees)
-
-    # Traiter l'image avec les données importées
+    image_path = 'ticket de caisse2.jpg'  # Remplace par le chemin de ton image
+    data = importer_donnees('Data_ingredients.py')
     traiter_ticket(image_path, data)
