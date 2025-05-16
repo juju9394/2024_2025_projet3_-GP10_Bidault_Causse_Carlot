@@ -58,7 +58,7 @@ recettes = [
             "Mélanger épinards, oignon, ail, saumon et verser dans la pâte.",
             "Ajouter l'appareil et parsemer de gruyère.",
             "Enfourner 30-35 minutes.",
-            "Laisser tiédir avant de servir."
+            "Laisser tiédir avant de servir." 
         ]
     },
     {
