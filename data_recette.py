@@ -6,16 +6,16 @@ recettes = [
         "personnes": 4,
         "ingredients": {
             "filet_mignon": {"quantite": "1 filet mignon de porc d'environ 600g", "unite": "g", "importance": 1.0},
-            "huile_olive": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.7},
+            "huile_olive": {"quantite": "30", "unite": "15", "importance": 0.7},
             "champignons": {"quantite": "250", "unite": "g", "importance": 0.8},
             "echalotes": {"quantite": "2", "unite": "", "importance": 0.6},
             "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.6},
-            "persil": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.5},
+            "persil": {"quantite": "30", "unite": "15", "importance": 0.5},
             "beurre": {"quantite": "30", "unite": "g", "importance": 0.6},
             "pate_feuilletee": {"quantite": "1", "unite": "", "importance": 0.9},
             "jambon_cru": {"quantite": "4 tranches", "unite": "", "importance": 0.8},
             "jaune_oeuf": {"quantite": "1", "unite": "", "importance": 0.7},
-            "moutarde": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.7}
+            "moutarde": {"quantite": "15", "unite": "ml", "importance": 0.7}
         },
         "etapes": [
             "Sortir le filet mignon du réfrigérateur 30 minutes avant la préparation.",
@@ -67,7 +67,7 @@ recettes = [
         "personnes": 2,
         "ingredients": {
             "dos_cabillaud": {"quantite": "400", "unite": "g", "importance": 1.0},
-            "huile_olive": {"quantite": "4 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.7},
+            "huile_olive": {"quantite": "60", "unite": "ml", "importance": 0.7},
             "citrons": {"quantite": "2", "unite": "", "importance": 0.8},
             "thym": {"quantite": "2", "unite": "g", "importance": 0.6},
             "romarin": {"quantite": "2", "unite": "g", "importance": 0.6},
@@ -88,8 +88,8 @@ recettes = [
         "personnes": 4,
         "ingredients": {
             "blancs_poulet": {"quantite": "400", "unite": "g", "importance": 1.0},
-            "huile_olive": {"quantite": "3 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.7},
-            "herbes_provence": {"quantite": "2 cuillères à café", "unite": "cuillères à café", "importance": 0.6},
+            "huile_olive": {"quantite": "3 cuillères à soupe", "unite": "15", "importance": 0.7},
+            "herbes_provence": {"quantite": "10", "unite": "ml", "importance": 0.6},
             "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.6},
             "citron": {"quantite": "1", "unite": "", "importance": 0.7}
         },
@@ -147,9 +147,9 @@ recettes = [
         "personnes": 2,
         "ingredients": {
             "oeufs": {"quantite": "4", "unite": "", "importance": 1.0},
-            "lait": {"quantite": "2 cuillères à soupe", "unite": "cuillères à soupe", "importance": 0.6},
-            "ciboulette": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.7},
-            "persil": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.7},
+            "lait": {"quantite": "30", "unite": "ml", "importance": 0.6},
+            "ciboulette": {"quantite": "15", "unite": "ml", "importance": 0.7},
+            "persil": {"quantite": "15", "unite": "ml", "importance": 0.7},
             "beurre": {"quantite": "1 noix", "unite": "", "importance": 0.5}
         },
         "etapes": [
@@ -168,7 +168,7 @@ recettes = [
             "creme_fraiche": {"quantite": "20", "unite": "cl", "importance": 0.8},
             "gruyere_rape": {"quantite": "100", "unite": "g", "importance": 0.9},
             "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.7},
-            "huile_olive": {"quantite": "1 cuillère à soupe", "unite": "cuillère à soupe", "importance": 0.6}
+            "huile_olive": {"quantite": "15", "unite": "ml", "importance": 0.6}
         },
         "etapes": [
             "Préchauffer le four à 180°C.",
@@ -208,7 +208,7 @@ recettes = [
             "carottes": {"quantite": "3", "unite": "", "importance": 0.8},
             "poireaux": {"quantite": "2", "unite": "", "importance": 0.7},
             "courgette": {"quantite": "1", "unite": "", "importance": 0.7},
-            "bouillon_legumes": {"quantite": "1 litre", "unite": "l", "importance": 1.0}
+            "bouillon_legumes": {"quantite": "1000", "unite": "ml", "importance": 1.0}
         },
         "etapes": [
             "Éplucher et couper tous les légumes en morceaux.",
