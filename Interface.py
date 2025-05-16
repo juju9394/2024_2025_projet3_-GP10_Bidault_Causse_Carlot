@@ -266,7 +266,7 @@ class MenuPage(QWidget):
         if ok and ingredient:
             quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
             if ok1 and quantity > 0:
-                units = ["g", "kg", "unités","ml"]
+                units = ["g", "unités","ml"]
                 unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
                 if ok2:
                     user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
