@@ -193,6 +193,6 @@ if __name__ == "__main__":
     freeze_support()
     model, class_names = train_model()
 
-    image_test_path = r'C:\Users\bidault\Downloads\mangue.jpg'
+    image_test_path = r'C:\Users\bidault\Downloads\poire5.jpg'
     resultat = predict_and_learn(model, class_names, image_test_path)
     print(f"Résultat final : {resultat}")
