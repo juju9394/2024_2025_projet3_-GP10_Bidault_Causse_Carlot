@@ -266,7 +266,7 @@ class MenuPage(QWidget):
         if ok and ingredient:
             quantity, ok1 = QInputDialog.getDouble(self, "Quantité", "Quantité:", decimals=2)
             if ok1 and quantity > 0:
-                units = ["g", "kg", "unités", "litres", "ml", "cuillères à soupe", "cuillères à café"]
+                units = ["g", "kg", "unités","ml"]
                 unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
                 if ok2:
                     user_data.ingredients.append({"name": ingredient, "quantity": quantity, "unit": unit})
@@ -325,73 +325,64 @@ class MenuPage(QWidget):
                 item.widget().deleteLater()
 
     def show_recette_detail(self, recette):
-        detail_window = QWidget()
-        detail_window.setWindowTitle(f"Recette : {recette['nom']}")
-        layout = QVBoxLayout()
+      detail_window = QWidget()
+      detail_window.setWindowTitle(f"Recette : {recette['nom']}")
+      layout = QVBoxLayout()
 
-        layout.addWidget(QLabel("<b>🛒 Ingrédients :</b>"))
-        for ingredient, info in recette["ingredients"].items():
-            texte = f"- {ingredient.replace('_', ' ').capitalize()} : {info['quantite']} {info['unite']}"
-            layout.addWidget(QLabel(texte))
+      layout.addWidget(QLabel("<b>🛒 Ingrédients :</b>"))
+      for ingredient, info in recette["ingredients"].items():
+          texte = f"- {ingredient.replace('_', ' ').capitalize()} : {info['quantite']} {info['unite']}"
+          layout.addWidget(QLabel(texte))
 
-        layout.addWidget(QLabel("\n"))
-        layout.addWidget(QLabel("<b>🧑‍🍳 Étapes :</b>"))
-        for i, etape in enumerate(recette["etapes"], start=1):
-            layout.addWidget(QLabel(f"{i}. {etape}"))
+      layout.addWidget(QLabel("\n"))
+      layout.addWidget(QLabel("<b>🧑‍🍳 Étapes :</b>"))
+      for i, etape in enumerate(recette["etapes"], start=1):
+          layout.addWidget(QLabel(f"{i}. {etape}"))
 
-        # Bouton pour valider la recette
-        valider_button = QPushButton("Valider la recette")
-        valider_button.clicked.connect(lambda: self.valider_recette(recette, detail_window))
-        layout.addWidget(valider_button)
+      def valider_recette():
+          manquants = []
+          for ing, info in recette["ingredients"].items():
+              ing_normalise = ing.lower().replace("_", " ")
+              found = False
+              for stock in user_data.ingredients:
+                  if stock["name"].lower() == ing_normalise and stock["unit"] == info["unite"]:
+                      if stock["quantity"] >= info["quantite"]:
+                          found = True
+                          break
+              if not found:
+                  manquants.append(ing_normalise)
 
-        # Bouton pour fermer la fenêtre
-        close_button = QPushButton("Fermer")
-        close_button.clicked.connect(detail_window.close)
-        layout.addWidget(close_button)
+          if manquants:
+              QMessageBox.warning(detail_window, "Ingrédients manquants", f"Ingrédients insuffisants : {', '.join(manquants)}")
+              return
 
-        detail_window.setLayout(layout)
-        detail_window.setGeometry(500, 300, 400, 600)
-        detail_window.show()
-        self.detail_window = detail_window
+        # Retirer les ingrédients
+          for ing, info in recette["ingredients"].items():
+              ing_normalise = ing.lower().replace("_", " ")
+              for stock in user_data.ingredients:
+                  if stock["name"].lower() == ing_normalise and stock["unit"] == info["unite"]:
+                      stock["quantity"] -= info["quantite"]
+                      if stock["quantity"] <= 0:
+                          user_data.ingredients.remove(stock)
+                      break
+ 
+          user_data.save_to_file()
+          QMessageBox.information(detail_window, "Succès", "Recette validée et ingrédients mis à jour !")
+          self.main_window.frigo_widget.update_ingredients()
 
-    def valider_recette(self, recette, detail_window):
-        manquants = []
-        for ing, info in recette["ingredients"].items():
-            # Vérifier uniquement les ingrédients avec un coefficient d'importance > 0.8
-            if info.get("importance", 0) <= 0.8:
-                continue
 
-            ing_normalise = ing.lower().replace("_", " ")
-            found = False
-            for stock in user_data.ingredients:
-                if stock["name"].lower() == ing_normalise and stock["unit"] == info["unite"]:
-                    if stock["quantity"] >= float(info["quantite"]):
-                        found = True
-                        break
-            if not found:
-                manquants.append(ing_normalise)
+      valider_button = QPushButton("Valider la recette")
+      valider_button.clicked.connect(valider_recette)
+      layout.addWidget(valider_button)
 
-        if manquants:
-            QMessageBox.warning(detail_window, "Ingrédients manquants", f"Ingrédients importants manquants : {', '.join(manquants)}")
-            return
+      close_button = QPushButton("Fermer")
+      close_button.clicked.connect(detail_window.close)
+      layout.addWidget(close_button)
 
-        # Retirer les ingrédients importants
-        for ing, info in recette["ingredients"].items():
-            if info.get("importance", 0) <= 0.8:
-                continue
-
-            ing_normalise = ing.lower().replace("_", " ")
-            for stock in user_data.ingredients:
-                if stock["name"].lower() == ing_normalise and stock["unit"] == info["unite"]:
-                    stock["quantity"] -= float(info["quantite"])
-                    if stock["quantity"] <= 0:
-                        user_data.ingredients.remove(stock)
-                    break
-
-        user_data.save_to_file()
-        QMessageBox.information(detail_window, "Succès", "Recette validée et ingrédients importants mis à jour !")
-        self.main_window.frigo_widget.update_ingredients()
-        
+      detail_window.setLayout(layout)
+      detail_window.setGeometry(500, 300, 400, 600)
+      detail_window.show()
+      self.detail_window = detail_window
 
 
 
@@ -450,3 +441,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+ 
