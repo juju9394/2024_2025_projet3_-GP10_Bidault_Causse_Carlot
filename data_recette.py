@@ -67,7 +67,7 @@ recettes = [
         "personnes": 2,
         "ingredients": {
             "dos_cabillaud": {"quantite": "400", "unite": "g", "importance": 1.0},
-            "huile_olive": {"quantite": "4 cuillères à soupe", "unite": "15", "importance": 0.7},
+            "huile_olive": {"quantite": "60", "unite": "ml", "importance": 0.7},
             "citrons": {"quantite": "2", "unite": "", "importance": 0.8},
             "thym": {"quantite": "2", "unite": "g", "importance": 0.6},
             "romarin": {"quantite": "2", "unite": "g", "importance": 0.6},
@@ -89,7 +89,7 @@ recettes = [
         "ingredients": {
             "blancs_poulet": {"quantite": "400", "unite": "g", "importance": 1.0},
             "huile_olive": {"quantite": "3 cuillères à soupe", "unite": "15", "importance": 0.7},
-            "herbes_provence": {"quantite": "2 cuillères à café", "unite": "cuillères à café", "importance": 0.6},
+            "herbes_provence": {"quantite": "10", "unite": "ml", "importance": 0.6},
             "ail": {"quantite": "2 gousses", "unite": "", "importance": 0.6},
             "citron": {"quantite": "1", "unite": "", "importance": 0.7}
         },
@@ -208,7 +208,7 @@ recettes = [
             "carottes": {"quantite": "3", "unite": "", "importance": 0.8},
             "poireaux": {"quantite": "2", "unite": "", "importance": 0.7},
             "courgette": {"quantite": "1", "unite": "", "importance": 0.7},
-            "bouillon_legumes": {"quantite": "1 litre", "unite": "l", "importance": 1.0}
+            "bouillon_legumes": {"quantite": "1000", "unite": "ml", "importance": 1.0}
         },
         "etapes": [
             "Éplucher et couper tous les légumes en morceaux.",
