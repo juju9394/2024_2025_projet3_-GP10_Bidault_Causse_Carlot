@@ -9,7 +9,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from PIL import Image, UnidentifiedImageError
 from torch.multiprocessing import freeze_support
 
-# ======== 1. Config ========
+
 torch.backends.cudnn.benchmark = True
 
 zip_path = r'C:\Users\carlot\Downloads\test.zip'
@@ -22,7 +22,7 @@ learning_rate = 0.001
 model_path = "resnet18_fruits_best.pth"
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# ======== 2. Transforms ========
+
 transform = transforms.Compose([
     transforms.Resize((image_size, image_size)),
     transforms.RandomHorizontalFlip(),
@@ -40,7 +40,7 @@ basic_transform = transforms.Compose([
                          std=[0.229, 0.224, 0.225])
 ])
 
-# ======== 3. Fonction Entraînement ========
+
 def train_model():
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_path)
@@ -133,7 +133,7 @@ def train_model():
     model.load_state_dict(best_model_wts)
     return model, class_names
 
-# ======== 4. Fonction Prédiction + Feedback ========
+
 def predict_and_learn(model, class_names, image_path):
     if not os.path.exists(image_path):
         print("❌ L'image spécifiée n'existe pas.")
@@ -154,7 +154,7 @@ def predict_and_learn(model, class_names, image_path):
     predicted_class = class_names[predicted.item()]
 
     if max_prob.item() < 0.6:
-        print("🤔 Je ne suis pas sûr... Ce n'est peut-être pas un fruit connu.")
+        print(" Je ne suis pas sûr... Ce n'est peut-être pas un fruit connu.")
         return "Inconnu"
 
     print(f"Prédiction : {predicted_class} (confiance : {max_prob.item():.2f})")
@@ -188,7 +188,7 @@ def predict_and_learn(model, class_names, image_path):
 
         return correct_class
 
-# ======== 5. Main ========
+
 if __name__ == "__main__":
     freeze_support()
     model, class_names = train_model()
