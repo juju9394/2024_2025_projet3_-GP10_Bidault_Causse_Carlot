@@ -127,8 +127,8 @@ recettes = [
         "personnes": 4,
         "ingredients": {
             "riz": {"quantite": "200", "unite": "g", "importance": 1.0},
-            "thon": {"quantite": "1 boite", "unite": "", "importance": 0.8},
-            "mais": {"quantite": "1 petite boite", "unite": "", "importance": 0.7},
+            "thon": {"quantite": "150", "unite": "g", "importance": 0.8},
+            "mais": {"quantite": "75", "unite": "g", "importance": 0.7},
             "tomates": {"quantite": "2", "unite": "", "importance": 0.6},
             "oeuf": {"quantite": "2", "unite": "", "importance": 0.7},
             "vinaigrette": {"quantite": "selon le gout", "unite": "", "importance": 0.5}
