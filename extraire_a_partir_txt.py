@@ -1,26 +1,40 @@
 # Importer le dictionnaire 'ingredients' depuis le fichier ingredients.py
-from ingredients import ingredient
+from ingredients import ingredients
+import re
 
-# Fonction pour classer les mots
+# Fonction pour classer les mots et détecter le grammage (uniquement g et l)
 def classer_mots_par_categorie(texte, dico):
     resultat = {categorie: [] for categorie in dico}
+    
+    # Expression régulière pour capturer un grammage en grammes (g) ou litres (l)
+    regex_grammage = re.compile(r'(\d+(\.\d+)?)\s*(g|l)', re.IGNORECASE)
 
-    # Séparation du texte en mots
     mots_texte = texte.lower().split()
-
-    # Parcours du texte et classification des mots
-    for mot in mots_texte:
+    for i, mot in enumerate(mots_texte):
+        # Vérifier si le mot est un ingrédient
         for categorie, mots in dico.items():
             if mot in mots:
-                resultat[categorie].append(mot)
+                # Si un grammage suit l'ingrédient, l'ajouter à la liste
+                grammage = None
+                if i + 1 < len(mots_texte):
+                    next_mot = mots_texte[i + 1]
+                    match = regex_grammage.search(next_mot)
+                    if match:
+                        grammage = match.group(0)
+
+                # Ajouter l'ingrédient et son grammage s'il y en a
+                if grammage:
+                    resultat[categorie].append((mot, grammage))
+                else:
+                    resultat[categorie].append((mot,))
 
     return resultat
 
 # Exemple de texte
-texte = "J'aime manger une pomme et une banane, parfois avec un peu de riz ou de pâtes."
+texte = "J'ai acheté 500g de pomme, 2l de jus, et 1l de lait."
 
-# Appeler la fonction avec 'ingredients' qui contient les données importées depuis ingredients.py
-resultats = classer_mots_par_categorie(texte, ingredient)
+# Appeler la fonction avec 'ingredients'
+resultats = classer_mots_par_categorie(texte, ingredients)
 
 # Afficher les résultats
 for categorie, mots in resultats.items():
