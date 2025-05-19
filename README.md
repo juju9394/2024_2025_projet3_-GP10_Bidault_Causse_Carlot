@@ -17,3 +17,6 @@ Aussi, l'on précise: les ustensiles que l'on a à dispotion afin que le code ne
 - Diversité de plats
 - Ludisme
 - Meilleure organisation
+
+## Utilisation :
+- Visual Studio code
