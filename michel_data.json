@@ -1,1 +1,1 @@
-{"username": "michel", "password": "123", "ingredients": [{"name": "riz", "quantity": 400.0, "unit": "g"}]}
+{"username": "michel", "password": "123", "ingredients": [{"name": "riz", "quantity": 400.0, "unit": "g"}, {"name": "mais", "quantity": 200.0, "unit": "g"}, {"name": "Thon", "quantity": 175.0, "unit": "g"}]}
