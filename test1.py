@@ -8,6 +8,8 @@ from torch.utils.data import DataLoader, random_split
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from PIL import Image, UnidentifiedImageError
 from torch.multiprocessing import freeze_support
+import sys
+print("Chemin reçu :", sys.argv[1])
 
 # ======== 1. Config ========
 torch.backends.cudnn.benchmark = True
@@ -16,8 +18,8 @@ zip_path = r'C:\Users\bidault\Downloads\test.zip'
 extract_path = r'C:\Users\bidault\Downloads\fruits_dataset'
 data_dir = extract_path
 batch_size = 32
-image_size = 128
-max_epochs = 8
+image_size = 64
+max_epochs = 7
 learning_rate = 0.001
 model_path = "resnet18_fruits_best.pth"
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -154,10 +156,11 @@ def predict_and_learn(model, class_names, image_path):
     predicted_class = class_names[predicted.item()]
 
     if max_prob.item() < 0.6:
-        print("🤔 Je ne suis pas sûr... Ce n'est peut-être pas un fruit connu.")
-        return "Inconnu"
+        print(f"🤔 Fruit inconnu (confiance : {max_prob.item():.2f}) — prédiction proposée : {predicted_class}")
+    else:
+        print(f"Prédiction : {predicted_class} (confiance : {max_prob.item():.2f})")
 
-    print(f"Prédiction : {predicted_class} (confiance : {max_prob.item():.2f})")
+    # Feedback utilisateur même en cas d'incertitude
     user_feedback = input("Est-ce correct ? (o/n) ").strip().lower()
 
     if user_feedback == 'o':
@@ -183,16 +186,17 @@ def predict_and_learn(model, class_names, image_path):
             torch.save(model.state_dict(), model_path)
             print(f"🔄 Modèle mis à jour avec la classe '{correct_class}'.")
             print("💾 Modèle sauvegardé après correction.")
+            return correct_class
         else:
             print("❌ Classe inconnue. Aucune mise à jour effectuée.")
+            return "Inconnu"
 
-        return correct_class
 
 # ======== 5. Main ========
 if __name__ == "__main__":
     freeze_support()
     model, class_names = train_model()
 
-    image_test_path = r'C:\Users\bidault\Downloads\poire5.jpg'
+    image_test_path = r'C:\Users\bidault\Downloads\ananas.jpg'
     resultat = predict_and_learn(model, class_names, image_test_path)
     print(f"Résultat final : {resultat}")
