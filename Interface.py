@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QL
                              QLabel, QMessageBox, QInputDialog, QStackedLayout)
 from PyQt5.QtCore import Qt
 from data_recette import recettes
-
+import subprocess
 
 class UserData:
     def __init__(self):
@@ -107,16 +107,12 @@ class MainWindow(BaseWindow):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
         layout.setSpacing(20)
-
         button1 = QPushButton("Créer un compte")
         button1.clicked.connect(lambda: self.stack_layout.setCurrentIndex(1))
-
         button2 = QPushButton("Connexion")
         button2.clicked.connect(lambda: self.stack_layout.setCurrentIndex(2))
-
         layout.addWidget(button1)
         layout.addWidget(button2)
-
         container = QWidget()
         container.setLayout(layout)
         return container
@@ -215,14 +211,15 @@ class MenuPage(QWidget):
 
         self.button2 = QPushButton("Mon Frigo")
         self.button2.clicked.connect(self.main_window.go_to_frigo)
-
+        self.button3 = QPushButton("Joindre une photo")
+        self.button3.clicked.connect(self.joindre_photo) 
         self.recipe_button = QPushButton("Proposer une recette")
         self.recipe_button.clicked.connect(self.proposer_recette)
 
         self.buttons_layout.addWidget(self.button1)
         self.buttons_layout.addWidget(self.button2)
         self.buttons_layout.addWidget(self.recipe_button)
-
+        self.buttons_layout.addWidget(self.button3)
         self.buttons_widget = QWidget()
         self.buttons_widget.setLayout(self.buttons_layout)
         self.main_layout.addWidget(self.buttons_widget)
@@ -260,6 +257,15 @@ class MenuPage(QWidget):
         self.back_button.hide()
 
         self.setLayout(self.main_layout)
+    def joindre_photo(self):
+        chemin, ok = QInputDialog.getText(self, "Joindre une photo", "Entrez le chemin d'accès à la photo :")
+        if ok and chemin:
+            try:
+                # Lance test1.py avec le chemin de la photo en argument
+                subprocess.Popen([sys.executable, "test1.py", chemin])
+                QMessageBox.information(self, "Photo envoyée", f"Le script test1.py a été lancé avec : {chemin}")
+            except Exception as e:
+                QMessageBox.critical(self, "Erreur", f"Impossible de lancer test1.py : {e}")    
 
     def add_ingredient(self):
         ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
