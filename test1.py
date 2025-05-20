@@ -199,7 +199,7 @@ def predict_and_learn(model, class_names, image_path):
             print("❌ Classe inconnue. Aucune mise à jour effectuée.")
             return "Inconnu"
 
-   # image_test_path = r'C:\Users\bidault\Downloads\ananas.jpg'
+   # C:\Users\bidault\Downloads\ananas.jpg
 if __name__ == "__main__":
     freeze_support()
     model, class_names = train_model()
