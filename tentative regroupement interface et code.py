@@ -196,6 +196,25 @@ class LoginPage(QWidget):
 
 
 from PyQt5.QtWidgets import (QScrollArea, QVBoxLayout, QWidget, QPushButton, QLabel)
+def importer_ticket(self):
+    texte, ok = QInputDialog.getMultiLineText(self, "Importer_ticket", "Copiez le ticket ci-dessous :")
+    if ok and texte:
+        resultats = classer_mots_par_categorie(texte)
+        ajoutés = 0
+        for categorie in resultats:
+            for item in resultats[categorie]:
+                # Vérifie si déjà présent
+                existe = False
+                for ing in user_data.ingredients:
+                    if ing["name"] == item["name"] and ing["unit"] == item["unit"]:
+                        ing["quantity"] += item["quantity"]
+                        existe = True
+                        break
+                if not existe:
+                    user_data.ingredients.append(item)
+                ajoutés += 1
+        user_data.save_to_file()
+        QMessageBox.information(self, "Importation réussie", f"{ajoutés} ingrédients ont été ajoutés au frigo.")
 
 class MenuPage(QWidget):
     def __init__(self, main_window):
@@ -211,12 +230,13 @@ class MenuPage(QWidget):
         self.buttons_layout.setAlignment(Qt.AlignCenter)
         self.buttons_layout.setSpacing(20)
         
+        
+        self.button1 = QPushButton("Ajouter des ingrédients")
+        self.button1.clicked.connect(self.add_ingredient)
+
         self.import_button = QPushButton("Importer ticket")
         self.import_button.clicked.connect(self.importer_ticket)
         self.buttons_layout.addWidget(self.import_button)
-
-        self.button1 = QPushButton("Ajouter des ingrédients")
-        self.button1.clicked.connect(self.add_ingredient)
 
         self.button2 = QPushButton("Mon Frigo")
         self.button2.clicked.connect(self.main_window.go_to_frigo)
@@ -268,25 +288,6 @@ class MenuPage(QWidget):
 
 
     
-def importer_ticket(self):
-    texte, ok = QInputDialog.getMultiLineText(self, "Importer un ticket", "Copiez le ticket ci-dessous :")
-    if ok and texte:
-        resultats = classer_mots_par_categorie(texte)
-        ajoutés = 0
-        for categorie in resultats:
-            for item in resultats[categorie]:
-                # Vérifie si déjà présent
-                existe = False
-                for ing in user_data.ingredients:
-                    if ing["name"] == item["name"] and ing["unit"] == item["unit"]:
-                        ing["quantity"] += item["quantity"]
-                        existe = True
-                        break
-                if not existe:
-                    user_data.ingredients.append(item)
-                ajoutés += 1
-        user_data.save_to_file()
-        QMessageBox.information(self, "Importation réussie", f"{ajoutés} ingrédients ont été ajoutés au frigo.")
 
     
 
@@ -303,7 +304,7 @@ def importer_ticket(self):
             else:
                 QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")
 
-    def proposer_recette(self):
+def proposer_recette(self):
     # Cacher les boutons principaux
       self.buttons_widget.hide()
 
@@ -343,7 +344,7 @@ def importer_ticket(self):
           self.recette_layout.addWidget(recette_card, alignment=Qt.AlignCenter)
 
 
-    def retour_menu(self):
+def retour_menu(self):
         self.scroll_area.hide()
         self.buttons_widget.show()
         self.back_button.hide()
@@ -353,7 +354,7 @@ def importer_ticket(self):
             if item.widget():
                 item.widget().deleteLater()
 
-    def show_recette_detail(self, recette):
+def show_recette_detail(self, recette):
       detail_window = QWidget()
       detail_window.setWindowTitle(f"Recette : {recette['nom']}")
       layout = QVBoxLayout()
