@@ -1,3 +1,11 @@
+import sys
+chemin_image = sys.argv[1]
+import sys
+
+if len(sys.argv) > 1:
+    print("Chemin reçu :", sys.argv[1])
+else:
+    print("Aucun chemin reçu.")
 import zipfile
 import os
 import copy
@@ -8,8 +16,8 @@ from torch.utils.data import DataLoader, random_split
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from PIL import Image, UnidentifiedImageError
 from torch.multiprocessing import freeze_support
-import sys
-print("Chemin reçu :", sys.argv[1])
+
+
 
 # ======== 1. Config ========
 torch.backends.cudnn.benchmark = True
@@ -191,12 +199,11 @@ def predict_and_learn(model, class_names, image_path):
             print("❌ Classe inconnue. Aucune mise à jour effectuée.")
             return "Inconnu"
 
-
-# ======== 5. Main ========
+   # image_test_path = r'C:\Users\bidault\Downloads\ananas.jpg'
 if __name__ == "__main__":
     freeze_support()
     model, class_names = train_model()
 
-    image_test_path = r'C:\Users\bidault\Downloads\ananas.jpg'
+    image_test_path = chemin_image
     resultat = predict_and_learn(model, class_names, image_test_path)
     print(f"Résultat final : {resultat}")
