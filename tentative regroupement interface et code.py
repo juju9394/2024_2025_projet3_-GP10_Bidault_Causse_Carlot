@@ -327,7 +327,7 @@ class MenuPage(QWidget):
             else:
                 QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")
 
-def proposer_recette(self):
+    def proposer_recette(self):
     # Cacher les boutons principaux
       self.buttons_widget.hide()
 
@@ -367,7 +367,7 @@ def proposer_recette(self):
           self.recette_layout.addWidget(recette_card, alignment=Qt.AlignCenter)
 
 
-def retour_menu(self):
+    def retour_menu(self):
         self.scroll_area.hide()
         self.buttons_widget.show()
         self.back_button.hide()
@@ -377,7 +377,7 @@ def retour_menu(self):
             if item.widget():
                 item.widget().deleteLater()
 
-def show_recette_detail(self, recette):
+    def show_recette_detail(self, recette):
       detail_window = QWidget()
       detail_window.setWindowTitle(f"Recette : {recette['nom']}")
       layout = QVBoxLayout()
