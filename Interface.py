@@ -1,7 +1,7 @@
 import sys
 import json
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QLineEdit,
-                             QLabel, QMessageBox, QInputDialog, QStackedLayout)
+                             QLabel, QMessageBox, QInputDialog, QStackedLayout,QScrollArea)
 from PyQt5.QtCore import Qt
 from data_recette import recettes
 import subprocess
@@ -190,7 +190,6 @@ class LoginPage(QWidget):
             QMessageBox.critical(self, "Erreur de connexion", "Identifiant ou mot de passe incorrect!")
 
 
-from PyQt5.QtWidgets import (QScrollArea, QVBoxLayout, QWidget, QPushButton, QLabel)
 
 class MenuPage(QWidget):
     def __init__(self, main_window):
@@ -224,7 +223,7 @@ class MenuPage(QWidget):
         self.buttons_widget.setLayout(self.buttons_layout)
         self.main_layout.addWidget(self.buttons_widget)
 
-        # Zone Scroll qui sera affichée SEULEMENT pour les recettes
+       
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.hide()
@@ -237,7 +236,7 @@ class MenuPage(QWidget):
 
         self.main_layout.addWidget(self.scroll_area)
 
-        # Bouton Retour tout en haut dans le scroll
+    
         self.back_button = QPushButton("Retour")
         self.back_button.clicked.connect(self.retour_menu)
         self.back_button.setStyleSheet("""
@@ -261,7 +260,7 @@ class MenuPage(QWidget):
         chemin, ok = QInputDialog.getText(self, "Joindre une photo", "Entrez le chemin d'accès à la photo :")
         if ok and chemin:
             try:
-                # Lance test1.py avec le chemin de la photo en argument
+               
                 subprocess.Popen([sys.executable, "test1.py", chemin])
                 QMessageBox.information(self, "Photo envoyée", f"Le script test1.py a été lancé avec : {chemin}")
             except Exception as e:
@@ -281,13 +280,13 @@ class MenuPage(QWidget):
                 QMessageBox.warning(self, "Erreur", "La quantité doit être supérieure à 0.")
 
     def proposer_recette(self):
-    # Cacher les boutons principaux
+    
       self.buttons_widget.hide()
 
-    # Afficher la zone de scroll
+    
       self.scroll_area.show()
 
-    # Nettoyer les anciennes cartes sauf le bouton retour
+    
       while self.recette_layout.count() > 1:
           item = self.recette_layout.takeAt(1)
           if item.widget():
@@ -296,7 +295,7 @@ class MenuPage(QWidget):
       self.back_button.show()
 
       for recette in recettes:
-        # Créer un texte qui inclut le nombre de personnes
+        
           recette_text = f"🍽️ {recette['nom']} \n⏲️ {recette['temps_cuisson']} \n👥 {recette['personnes']} personnes"
         
           recette_card = QPushButton(recette_text)
@@ -362,7 +361,7 @@ class MenuPage(QWidget):
               QMessageBox.warning(detail_window, "Ingrédients manquants", f"Ingrédients insuffisants : {', '.join(manquants)}")
               return
 
-        # Retirer les ingrédients
+        
           for ing, info in recette["ingredients"].items():
               ing_normalise = ing.lower().replace("_", " ")
               for stock in user_data.ingredients:
