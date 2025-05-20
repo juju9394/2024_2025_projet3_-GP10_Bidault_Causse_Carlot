@@ -257,15 +257,16 @@ class MenuPage(QWidget):
         self.back_button.hide()
 
         self.setLayout(self.main_layout)
+   
     def joindre_photo(self):
-        chemin, ok = QInputDialog.getText(self, "Joindre une photo", "Entrez le chemin d'accès à la photo :")
-        if ok and chemin:
-            try:
-                # Lance test1.py avec le chemin de la photo en argument
-                subprocess.Popen([sys.executable, "test1.py", chemin])
-                QMessageBox.information(self, "Photo envoyée", f"Le script test1.py a été lancé avec : {chemin}")
-            except Exception as e:
-                QMessageBox.critical(self, "Erreur", f"Impossible de lancer test1.py : {e}")    
+      chemin, ok = QInputDialog.getText(self, "Joindre une photo", "Entrez le chemin d'accès à la photo :")
+      if ok and chemin:
+       try:
+            script_path = r"C:\Users\bidault\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
+            subprocess.Popen([sys.executable, script_path, chemin])
+            QMessageBox.information(self, "Photo envoyée", f"Le script test1.py a été lancé avec : {chemin}")
+       except Exception as e:
+            QMessageBox.critical(self, "Erreur", f"Impossible de lancer test1.py : {e}")    
 
     def add_ingredient(self):
         ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
