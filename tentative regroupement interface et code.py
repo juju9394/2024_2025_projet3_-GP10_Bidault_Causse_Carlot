@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QL
                              QLabel, QMessageBox, QInputDialog, QStackedLayout)
 from PyQt5.QtCore import Qt
 from data_recette import recettes
-from extractor import classer_mots_par_categorie
+
 
 
 class UserData:
@@ -268,25 +268,28 @@ class MenuPage(QWidget):
 
 
     
-def importer_ticket(self):
-    texte, ok = QInputDialog.getMultiLineText(self, "Importer un ticket", "Copiez le ticket ci-dessous :")
-    if ok and texte:
-        resultats = classer_mots_par_categorie(texte)
-        ajoutés = 0
-        for categorie in resultats:
-            for item in resultats[categorie]:
-                # Vérifie si déjà présent
-                existe = False
-                for ing in user_data.ingredients:
-                    if ing["name"] == item["name"] and ing["unit"] == item["unit"]:
-                        ing["quantity"] += item["quantity"]
-                        existe = True
-                        break
-                if not existe:
-                    user_data.ingredients.append(item)
+    def importer_ticket(self):
+        texte, ok = QInputDialog.getMultiLineText(self, "Importer un ticket", "Copiez le ticket ci-dessous :")
+        if ok and texte:
+            resultats = (texte)
+            ajoutés = 0
+            for categorie in resultats:
+                for item in resultats:
+                    if not all(k in item for k in ("name", "quantity", "unit")):
+                        continue  # Ignore si un champ manque
+
+                    existe = False
+                    for ing in user_data.ingredients:
+                        if ing["name"] == item["name"] and ing["unit"] == item["unit"]:
+                            ing["quantity"] += item["quantity"]
+                            existe = True
+                            break
+                    if not existe:
+                        user_data.ingredients.append(item)
                 ajoutés += 1
         user_data.save_to_file()
         QMessageBox.information(self, "Importation réussie", f"{ajoutés} ingrédients ont été ajoutés au frigo.")
+
 
     
 
@@ -434,8 +437,15 @@ class FrigoPage(QWidget):
         sorted_ingredients = sorted(user_data.ingredients, key=lambda x: x['name'].lower())
 
         for ingredient in sorted_ingredients:
-            label = QLabel(f"{ingredient['name']} ({ingredient['quantity']} {ingredient['unit']})")
-            self.layout.addWidget(label)
+            try:
+                nom = ingredient["name"]
+                quantite = ingredient["quantity"]
+                unite = ingredient["unit"]
+                label = QLabel(f"{nom} ({quantite} {unite})")
+                self.layout.addWidget(label)
+            except KeyError as e:
+                print(f"Ingrédient corrompu ou incomplet : {ingredient} — Erreur : {e}")
+
 
         remove_button = QPushButton("Retirer un ingrédient")
         remove_button.clicked.connect(self.remove_ingredient)
