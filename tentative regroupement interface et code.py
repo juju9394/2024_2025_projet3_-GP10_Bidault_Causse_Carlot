@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QL
                              QLabel, QMessageBox, QInputDialog, QStackedLayout)
 from PyQt5.QtCore import Qt
 from data_recette import recettes
-
-
+from ingredients import*
+import re
 
 class UserData:
     def __init__(self):
@@ -196,25 +196,7 @@ class LoginPage(QWidget):
 
 
 from PyQt5.QtWidgets import (QScrollArea, QVBoxLayout, QWidget, QPushButton, QLabel)
-def importer_ticket(self):
-    texte, ok = QInputDialog.getMultiLineText(self, "Importer_ticket", "Copiez le ticket ci-dessous :")
-    if ok and texte:
-        resultats = (texte)
-        ajoutés = 0
-        for categorie in resultats:
-            for item in resultats[categorie]:
-                # Vérifie si déjà présent
-                existe = False
-                for ing in user_data.ingredients:
-                    if ing["name"] == item["name"] and ing["unit"] == item["unit"]:
-                        ing["quantity"] += item["quantity"]
-                        existe = True
-                        break
-                if not existe:
-                    user_data.ingredients.append(item)
-                ajoutés += 1
-        user_data.save_to_file()
-        QMessageBox.information(self, "Importation réussie", f"{ajoutés} ingrédients ont été ajoutés au frigo.")
+
 
 class MenuPage(QWidget):
     def __init__(self, main_window):
@@ -289,27 +271,56 @@ class MenuPage(QWidget):
 
     
 
+
+
+  # from ingredients import ingredient
+    import re
+    from ingredients import ingredient 
+
     def importer_ticket(self):
         texte, ok = QInputDialog.getMultiLineText(self, "Importer un ticket", "Copiez le ticket ci-dessous :")
-        if ok and texte:
-            resultats = (texte)
-            ajoutés = 0
-            for categorie in resultats:
-                for item in resultats:
-                    if not all(k in item for k in ("name", "quantity", "unit")):
-                        continue  # Ignore si un champ manque
+        if not ok or not texte.strip():
+         return
 
-                    existe = False
-                    for ing in user_data.ingredients:
-                        if ing["name"] == item["name"] and ing["unit"] == item["unit"]:
-                            ing["quantity"] += item["quantity"]
-                            existe = True
-                            break
-                    if not existe:
-                        user_data.ingredients.append(item)
+        lignes = texte.lower().splitlines()
+        ajoutés = 0
+
+        for ligne in lignes:
+            for nom_ingredient in ingredient:
+            # Crée une regex pour trouver l'ingrédient + quantité + unité
+                pattern = rf"\b{re.escape(nom_ingredient)}\b.*?(\d+[\.,]?\d*)\s*(g|ml|l|unit[eé]s?)?"
+                match = re.search(pattern, ligne)
+
+                if match:
+                    quantite_str = match.group(1).replace(",", ".")
+                try:
+                    quantite = float(quantite_str)
+                except ValueError:
+                    continue  # si la conversion échoue, on saute
+
+                unite = match.group(2) or "unités"
+
+                # Cherche si l'ingrédient est déjà dans le frigo
+                trouvé = False
+                for ing in user_data.ingredients:
+                    if ing["name"] == nom_ingredient and ing["unit"] == unite:
+                        ing["quantity"] += quantite
+                        trouvé = True
+                        break
+
+                if not trouvé:
+                    user_data.ingredients.append({
+                        "name": nom_ingredient,
+                        "quantity": quantite,
+                        "unit": unite
+                    })
+
                 ajoutés += 1
+                break  # on arrête de chercher d'autres ingrédients sur cette ligne
+
         user_data.save_to_file()
         QMessageBox.information(self, "Importation réussie", f"{ajoutés} ingrédients ont été ajoutés au frigo.")
+        self.main_window.frigo_widget.update_ingredients()
 
 
     
