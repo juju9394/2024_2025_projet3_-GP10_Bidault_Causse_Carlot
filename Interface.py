@@ -260,12 +260,26 @@ class MenuPage(QWidget):
     def joindre_photo(self):
       chemin, ok = QInputDialog.getText(self, "Joindre une photo", "Entrez le chemin d'accès à la photo :")
       if ok and chemin:
-       try:
-            script_path = r"C:\Users\bidault\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
-            subprocess.Popen([sys.executable, script_path, chemin])
-            QMessageBox.information(self, "Photo envoyée", f"Le script test1.py a été lancé avec : {chemin}")
-       except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Impossible de lancer test1.py : {e}")    
+          try:
+              script_path = r"C:\Users\bidault\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
+              process = subprocess.Popen([sys.executable, script_path, chemin])
+              process.wait()
+
+              with open("resultat_prediction.json", "r") as f:
+                  result_data = json.load(f)
+                  prediction = result_data.get("prediction", "Inconnu")
+
+              reply = QMessageBox.question(self, "Résultat", f"Fruit détecté : {prediction}\nSouhaitez-vous l'ajouter au frigo ?",
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+              if reply == QMessageBox.Yes:
+                  user_data.ingredients.append({"name": prediction, "quantity": 1.0, "unit": "unités"})
+                  user_data.save_to_file()
+                  QMessageBox.information(self, "Ajouté", f"{prediction} ajouté au frigo.")
+              else:
+                  QMessageBox.information(self, "Annulé", "Ajout annulé.")
+          except Exception as e:
+              QMessageBox.critical(self, "Erreur", f"Impossible de traiter l'image : {e}")
+    
 
     def add_ingredient(self):
         ingredient, ok = QInputDialog.getText(self, "Ajouter un ingrédient", "Nom de l'ingrédient:")
