@@ -1,11 +1,5 @@
 import sys
-chemin_image = sys.argv[1]
-import sys
-
-if len(sys.argv) > 1:
-    print("Chemin reçu :", sys.argv[1])
-else:
-    print("Aucun chemin reçu.")
+import json
 import zipfile
 import os
 import copy
@@ -13,197 +7,140 @@ import torch
 import torch.nn as nn
 from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader, random_split
-from torch.optim.lr_scheduler import ReduceLROnPlateau
 from PIL import Image, UnidentifiedImageError
 from torch.multiprocessing import freeze_support
 
+chemin_image = sys.argv[1]
 
-
-# ======== 1. Config ========
+# ======== CONFIGURATION PRÉCISE ========
 torch.backends.cudnn.benchmark = True
-
 zip_path = r'C:\Users\bidault\Downloads\test.zip'
 extract_path = r'C:\Users\bidault\Downloads\fruits_dataset'
 data_dir = extract_path
-batch_size = 32
-image_size = 64
-max_epochs = 7
-learning_rate = 0.001
-model_path = "resnet18_fruits_best.pth"
+batch_size = 16
+image_size = 224
+max_epochs = 20
+learning_rate = 0.0001
+model_path = "resnet50_fruits_best.pth"
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+confidence_threshold = 0.75
 
-# ======== 2. Transforms ========
+# ======== TRANSFORMATIONS STABLES ========
 transform = transforms.Compose([
     transforms.Resize((image_size, image_size)),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomRotation(15),
-    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225])
 ])
+basic_transform = transform
 
-basic_transform = transforms.Compose([
-    transforms.Resize((image_size, image_size)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225])
-])
-
-# ======== 3. Fonction Entraînement ========
+# ======== ENTRAÎNEMENT PROFOND ========
 def train_model():
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_path)
-    print("Contenu extrait :", os.listdir(extract_path))
 
     dataset = datasets.ImageFolder(root=data_dir, transform=transform)
     train_size = int(0.8 * len(dataset))
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
-
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
     class_names = dataset.classes
-    num_classes = len(class_names)
-    print(f"Classes détectées : {class_names}")
+    model = models.resnet50(pretrained=True)
 
-    model = models.resnet18(pretrained=True)
+    # Fine-tune seulement les dernières couches
     for param in model.parameters():
+        param.requires_grad = False
+    for param in model.layer4.parameters():
         param.requires_grad = True
-
-    model.fc = nn.Linear(model.fc.in_features, num_classes)
+    model.fc = nn.Linear(model.fc.in_features, len(class_names))
     model = model.to(device)
 
-    if os.path.exists(model_path):
+    if not os.path.exists(model_path):
+        criterion = nn.CrossEntropyLoss()
+        optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=learning_rate)
+
+        best_model_wts = copy.deepcopy(model.state_dict())
+        best_val_acc = 0.0
+
+        for epoch in range(max_epochs):
+            model.train()
+            running_corrects = 0
+            total = 0
+
+            for inputs, labels in train_loader:
+                inputs, labels = inputs.to(device), labels.to(device)
+                outputs = model(inputs)
+                loss = criterion(outputs, labels)
+
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+                _, preds = torch.max(outputs, 1)
+                running_corrects += torch.sum(preds == labels)
+                total += labels.size(0)
+
+            train_acc = running_corrects.double() / total
+            print(f"[{epoch+1}/{max_epochs}] Accuracy : {train_acc:.3f}")
+
+            # Évaluation
+            model.eval()
+            correct = 0
+            total = 0
+            with torch.no_grad():
+                for inputs, labels in val_loader:
+                    inputs, labels = inputs.to(device), labels.to(device)
+                    outputs = model(inputs)
+                    _, preds = torch.max(outputs, 1)
+                    correct += torch.sum(preds == labels).item()
+                    total += labels.size(0)
+            val_acc = correct / total
+
+            if val_acc > best_val_acc:
+                best_val_acc = val_acc
+                best_model_wts = copy.deepcopy(model.state_dict())
+
+        model.load_state_dict(best_model_wts)
+        torch.save(model.state_dict(), model_path)
+    else:
         model.load_state_dict(torch.load(model_path, map_location=device))
-        print("✅ Modèle pré-entraîné chargé.")
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    scheduler = ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=2)
-
-    best_acc = 0.0
-    best_model_wts = copy.deepcopy(model.state_dict())
-    patience_counter = 0
-    patience_limit = 3
-
-    print("Entraînement démarré...")
-    for epoch in range(max_epochs):
-        model.train()
-        running_loss = 0.0
-        correct = 0
-        total = 0
-
-        for images, labels in train_loader:
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-
-            running_loss += loss.item()
-            _, predicted = torch.max(outputs, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-
-        epoch_loss = running_loss / len(train_loader)
-        epoch_acc = 100 * correct / total
-
-        model.eval()
-        val_correct = 0
-        val_total = 0
-        with torch.no_grad():
-            for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
-                outputs = model(images)
-                _, predicted = torch.max(outputs, 1)
-                val_total += labels.size(0)
-                val_correct += (predicted == labels).sum().item()
-
-        val_acc = 100 * val_correct / val_total
-        scheduler.step(val_acc)
-
-        print(f"Epoch [{epoch+1}/{max_epochs}] | Train Acc: {epoch_acc:.2f}% | Val Acc: {val_acc:.2f}%")
-
-        if val_acc > best_acc:
-            best_acc = val_acc
-            best_model_wts = copy.deepcopy(model.state_dict())
-            torch.save(best_model_wts, model_path)
-            print("✓ Nouveau meilleur modèle sauvegardé.")
-            patience_counter = 0
-        else:
-            patience_counter += 1
-            if patience_counter >= patience_limit:
-                print("🛑 Arrêt anticipé (early stopping).")
-                break
-
-    model.load_state_dict(best_model_wts)
     return model, class_names
 
-# ======== 4. Fonction Prédiction + Feedback ========
-def predict_and_learn(model, class_names, image_path):
+# ======== PRÉDICTION FIABLE ========
+def predict(model, class_names, image_path):
     if not os.path.exists(image_path):
-        print("❌ L'image spécifiée n'existe pas.")
         return "Image introuvable"
-
     try:
         image = Image.open(image_path).convert('RGB')
     except UnidentifiedImageError:
-        print("❌ Le fichier n'est pas une image valide.")
         return "Fichier non valide"
 
     image_tensor = basic_transform(image).unsqueeze(0).to(device)
-
     model.eval()
-    outputs = model(image_tensor)
-    probabilities = torch.nn.functional.softmax(outputs, dim=1)
-    max_prob, predicted = torch.max(probabilities, 1)
-    predicted_class = class_names[predicted.item()]
+    with torch.no_grad():
+        outputs = model(image_tensor)
+        probs = torch.nn.functional.softmax(outputs, dim=1)
+        max_prob, pred = torch.max(probs, 1)
 
-    if max_prob.item() < 0.6:
-        print(f"🤔 Fruit inconnu (confiance : {max_prob.item():.2f}) — prédiction proposée : {predicted_class}")
-    else:
-        print(f"Prédiction : {predicted_class} (confiance : {max_prob.item():.2f})")
+    predicted_class = class_names[pred.item()]
+    confidence = max_prob.item()
 
-    # Feedback utilisateur même en cas d'incertitude
-    user_feedback = input("Est-ce correct ? (o/n) ").strip().lower()
+    if confidence < confidence_threshold:
+        return f"Inconnu (confiance {confidence:.2f})"
+    return f"{predicted_class} ({confidence*100:.1f}%)"
 
-    if user_feedback == 'o':
-        print("✓ Prédiction confirmée.")
-        return predicted_class
-    else:
-        print(f"Classes disponibles : {class_names}")
-        correct_class = input("Tapez la bonne classe : ").strip().lower()
-
-        if correct_class in class_names:
-            correct_index = class_names.index(correct_class)
-            criterion = nn.CrossEntropyLoss()
-            optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-
-            model.train()
-            outputs = model(image_tensor)
-            loss = criterion(outputs, torch.tensor([correct_index]).to(device))
-
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-
-            torch.save(model.state_dict(), model_path)
-            print(f"🔄 Modèle mis à jour avec la classe '{correct_class}'.")
-            print("💾 Modèle sauvegardé après correction.")
-            return correct_class
-        else:
-            print("❌ Classe inconnue. Aucune mise à jour effectuée.")
-            return "Inconnu"
-
-   # C:\Users\bidault\Downloads\ananas.jpg
+# ======== MAIN ========
 if __name__ == "__main__":
     freeze_support()
     model, class_names = train_model()
+    resultat = predict(model, class_names, chemin_image)
 
-    image_test_path = chemin_image
-    resultat = predict_and_learn(model, class_names, image_test_path)
-    print(f"Résultat final : {resultat}")
+    with open("resultat_prediction.json", "w") as f:
+        json.dump({"prediction": resultat}, f)
+
+
+
+#C:\Users\bidault\Downloads\ananas.jpg
