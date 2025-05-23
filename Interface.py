@@ -2,11 +2,11 @@ import sys
 import json
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QVBoxLayout, QLineEdit,
                              QLabel, QMessageBox, QInputDialog, QStackedLayout, QScrollArea,
-                             QHBoxLayout) # Added QHBoxLayout for better organization
+                             QHBoxLayout)
 from PyQt5.QtCore import Qt
 from data_recette import recettes
 import subprocess
-import os # Import os for path manipulation
+import os 
 
 class UserData:
     def __init__(self):
@@ -15,7 +15,7 @@ class UserData:
         self.ingredients = []
 
     def save_to_file(self):
-        # Ensure the directory for user data exists
+        
         if not os.path.exists("user_data"):
             os.makedirs("user_data")
         data = {
@@ -224,11 +224,11 @@ class AccountCreationPage(QWidget):
             QMessageBox.warning(self, "Erreur", "Veuillez remplir tous les champs.")
             return
 
-        # Check if username already exists
+        
         temp_user_data = UserData()
         temp_user_data.username = username
         temp_user_data.load_from_file()
-        if temp_user_data.password: # If password exists, means user data file exists
+        if temp_user_data.password: 
             QMessageBox.warning(self, "Erreur", "Cet identifiant existe déjà. Veuillez en choisir un autre.")
             return
 
@@ -311,7 +311,7 @@ class MenuPage(QWidget):
         self.main_layout.setAlignment(Qt.AlignCenter)
         self.main_layout.setSpacing(25)
 
-        # Main layout for the 3 buttons
+        
         self.buttons_layout = QVBoxLayout()
         self.buttons_layout.setAlignment(Qt.AlignCenter)
         self.buttons_layout.setSpacing(20)
@@ -378,21 +378,21 @@ class MenuPage(QWidget):
                 return
 
             try:
-                # Ensure the script path is correct
+                
                 script_path = r"C:\Users\bidault\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
-                # Use absolute path for robustness
+                
                 script_path = os.path.abspath(script_path)
 
-                # Check if test1.py exists
+                
                 if not os.path.exists(script_path):
                     QMessageBox.critical(self, "Erreur", f"Le script AI '{script_path}' est introuvable. Veuillez vérifier le chemin.")
                     return
 
-                # Execute the AI script
+                
                 process = subprocess.Popen([sys.executable, script_path, chemin])
-                process.wait() # Wait for the AI script to finish
+                process.wait() 
 
-                # Read the prediction result
+                
                 result_file_path = "resultat_prediction.json"
                 if not os.path.exists(result_file_path):
                     QMessageBox.critical(self, "Erreur", "Le fichier de résultat de l'IA est introuvable. Le script AI a peut-être échoué.")
@@ -402,22 +402,22 @@ class MenuPage(QWidget):
                     result_data = json.load(f)
                     prediction_raw = result_data.get("prediction", "Inconnu (confiance 0.00)")
 
-                # Parse the prediction string
-                # Example: "Apple (98.5%)" or "Inconnu (confiance 0.65)"
+                
+                
                 if "Inconnu" in prediction_raw:
                     QMessageBox.information(self, "Résultat de la Détection",
                                             f"L'IA n'a pas pu identifier le fruit avec une confiance suffisante.\n{prediction_raw}")
-                    # Offer to add manually
+                    
                     add_manually_reply = QMessageBox.question(self, "Action requise",
                                                               "Voulez-vous ajouter cet ingrédient manuellement ?",
                                                               QMessageBox.Yes | QMessageBox.No)
                     if add_manually_reply == QMessageBox.Yes:
-                        self.add_ingredient() # Call the existing add_ingredient method
+                        self.add_ingredient()
                 else:
-                    # Extract fruit name and confidence
+                   
                     parts = prediction_raw.split(' (')
                     fruit_name = parts[0]
-                    confidence_str = parts[1][:-2] # Remove '%)'
+                    confidence_str = parts[1][:-2] 
                     confidence = float(confidence_str) / 100
 
                     reply = QMessageBox.question(self, "Résultat de la Détection",
@@ -425,7 +425,7 @@ class MenuPage(QWidget):
                                                  f"Souhaitez-vous l'ajouter au frigo ?",
                                                  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                     if reply == QMessageBox.Yes:
-                        # Add to user_data's ingredients
+                        
                         user_data.ingredients.append({"name": fruit_name, "quantity": 1.0, "unit": "unités"})
                         user_data.save_to_file()
                         QMessageBox.information(self, "Ajouté", f"{fruit_name} ajouté au frigo avec succès.")
@@ -440,7 +440,7 @@ class MenuPage(QWidget):
         if ok and ingredient.strip():
             quantity, ok1 = QInputDialog.getDouble(self, "Quantité", f"Quantité de {ingredient.strip()}:", decimals=2)
             if ok1 and quantity > 0:
-                units = ["g", "unités", "ml", "kg", "litres"] # Added more common units
+                units = ["g", "unités", "ml", "kg", "litres"] 
                 unit, ok2 = QInputDialog.getItem(self, "Unité", "Unité:", units, 0, False)
                 if ok2:
                     user_data.ingredients.append({"name": ingredient.strip(), "quantity": quantity, "unit": unit})
@@ -456,15 +456,15 @@ class MenuPage(QWidget):
         self.buttons_widget.hide()
         self.scroll_area.show()
 
-        # Clear previous recipes from the layout, except the back button
-        while self.recette_layout.count() > 1: # Keep the back button at index 0
-            item = self.recette_layout.takeAt(0) # Take from the beginning to remove recipe cards
-            if item.widget() and item.widget() != self.back_button_recettes: # Ensure it's not the back button
+        
+        while self.recette_layout.count() > 1: 
+            item = self.recette_layout.takeAt(0) 
+            if item.widget() and item.widget() != self.back_button_recettes: 
                 item.widget().deleteLater()
 
         self.back_button_recettes.show()
 
-        # Add recipe cards
+        
         if not recettes:
             no_recipe_label = QLabel("Aucune recette disponible pour le moment.")
             no_recipe_label.setAlignment(Qt.AlignCenter)
@@ -493,7 +493,7 @@ class MenuPage(QWidget):
                 recette_card.clicked.connect(lambda _, r=recette: self.show_recette_detail(r))
                 self.recette_layout.addWidget(recette_card, alignment=Qt.AlignCenter)
 
-        # Re-add the back button at the end to ensure it's always there
+        
         self.recette_layout.addWidget(self.back_button_recettes, alignment=Qt.AlignCenter)
 
 
@@ -502,13 +502,13 @@ class MenuPage(QWidget):
         self.buttons_widget.show()
         self.back_button_recettes.hide()
 
-        # Clear recipe details to prevent stale content
-        while self.recette_layout.count() > 0: # Clear all, then re-add back button in proposer_recette
+        
+        while self.recette_layout.count() > 0: 
             item = self.recette_layout.takeAt(0)
             if item.widget():
                 item.widget().deleteLater()
 
-        # Add back button temporarily for proposer_recette to manage it
+        
         self.recette_layout.addWidget(self.back_button_recettes, alignment=Qt.AlignCenter)
 
 
@@ -518,12 +518,12 @@ class MenuPage(QWidget):
         layout = QVBoxLayout()
         layout.setSpacing(10)
 
-        # Title
+       
         title_label = QLabel(f"<h2 style='color:#43cea2;'>{recette['nom']}</h2>")
         title_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(title_label)
 
-        # Times and servings
+        
         info_layout = QHBoxLayout()
         info_layout.setAlignment(Qt.AlignCenter)
         info_layout.addWidget(QLabel(f"<b>⏲️ Temps de cuisson :</b> {recette['temps_cuisson']}"))
@@ -538,7 +538,7 @@ class MenuPage(QWidget):
         layout.addWidget(QLabel("<br><b>🧑‍🍳 Étapes :</b>"))
         for i, etape in enumerate(recette["etapes"], start=1):
             etape_label = QLabel(f"{i}. {etape}")
-            etape_label.setWordWrap(True) # Ensure long steps wrap
+            etape_label.setWordWrap(True) 
             layout.addWidget(etape_label)
 
         def valider_recette():
@@ -556,7 +556,7 @@ class MenuPage(QWidget):
 
             if manquants:
                 QMessageBox.warning(detail_window, "Ingrédients manquants", f"Ingrédients insuffisants :\n- {', '.join([m.capitalize() for m in manquants])}\n\nVoulez-vous quand même valider la recette ? (Cela ne mettra pas à jour votre frigo)")
-                # If user wants to proceed despite missing ingredients, allow it but don't deduct
+                
                 reply_missing = QMessageBox.question(detail_window, "Confirmation", "Voulez-vous quand même valider la recette ? (Les ingrédients ne seront pas déduits du frigo)",
                                                     QMessageBox.Yes | QMessageBox.No)
                 if reply_missing == QMessageBox.Yes:
@@ -564,15 +564,15 @@ class MenuPage(QWidget):
                     detail_window.close()
                 return
 
-            # Deduct ingredients if all are present
+            
             for ing, info in recette["ingredients"].items():
                 ing_normalise = ing.lower().replace("_", " ").strip()
                 for stock in user_data.ingredients:
                     if stock["name"].lower().strip() == ing_normalise and stock["unit"].lower().strip() == info["unite"].lower().strip():
                         stock["quantity"] -= info["quantite"]
-                        break # Found the ingredient, move to the next recipe ingredient
+                        break 
 
-            # Remove ingredients with quantity <= 0
+            
             user_data.ingredients = [ing for ing in user_data.ingredients if ing["quantity"] > 0]
 
             user_data.save_to_file()
@@ -590,9 +590,9 @@ class MenuPage(QWidget):
         layout.addWidget(close_button)
 
         detail_window.setLayout(layout)
-        detail_window.setGeometry(500, 300, 500, 700) # Slightly larger for better readability
+        detail_window.setGeometry(500, 300, 500, 700) 
         detail_window.show()
-        self.detail_window = detail_window # Keep a reference to prevent garbage collection
+        self.detail_window = detail_window 
 
 
 class FrigoPage(QWidget):
@@ -602,7 +602,7 @@ class FrigoPage(QWidget):
         self.main_layout = QVBoxLayout()
         self.main_layout.setAlignment(Qt.AlignTop)
 
-        # Scroll area for ingredients list
+        
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.ingredient_list_widget = QWidget()
@@ -613,7 +613,7 @@ class FrigoPage(QWidget):
 
         self.main_layout.addWidget(self.scroll_area)
 
-        # Buttons at the bottom
+        
         self.button_layout = QHBoxLayout()
         self.remove_button = QPushButton("Retirer un ingrédient")
         self.remove_button.clicked.connect(self.remove_ingredient)
@@ -642,7 +642,7 @@ class FrigoPage(QWidget):
 
 
     def update_ingredients(self):
-        # Clear existing ingredient labels
+      
         for i in reversed(range(self.ingredient_list_layout.count())):
             widget = self.ingredient_list_layout.itemAt(i).widget()
             if widget:
@@ -671,7 +671,7 @@ class FrigoPage(QWidget):
             index = items.index(item)
             ingredient_to_remove = sorted_ingredients[index]
 
-            # Ask for quantity to remove if unit is not 'unités' or if quantity is more than 1
+           
             if ingredient_to_remove['unit'] != 'unités' and ingredient_to_remove['quantity'] > 1:
                 quantity_to_remove, ok_q = QInputDialog.getDouble(self, "Quantité à retirer",
                                                                  f"Quantité de {ingredient_to_remove['name']} à retirer (max {ingredient_to_remove['quantity']}):",
@@ -689,14 +689,14 @@ class FrigoPage(QWidget):
                 elif ok_q and quantity_to_remove <= 0:
                     QMessageBox.warning(self, "Erreur", "La quantité à retirer doit être supérieure à 0.")
                     return
-                else: # User cancelled quantity input
+                else:
                     return
-            else: # For 'unités' or single items, remove the whole item
+            else: 
                 user_data.ingredients.remove(ingredient_to_remove)
                 QMessageBox.information(self, "Retiré", f"{ingredient_to_remove['name']} a été retiré(e) de votre frigo.")
 
             user_data.save_to_file()
-            self.update_ingredients() # Refresh the list
+            self.update_ingredients() 
 
 
 def main():
