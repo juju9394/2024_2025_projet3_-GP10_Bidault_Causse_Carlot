@@ -20,4 +20,6 @@ Aussi, l'on précise: les ustensiles que l'on a à dispotion afin que le code ne
 
 ## Utilisation :
 - Visual Studio code
-besoin de : pip install PyQt5
+besoin de :
+-pip install PyQt5
+-pip install torch torchvision torchaudio
