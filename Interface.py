@@ -379,7 +379,7 @@ class MenuPage(QWidget):
 
             try:
                 
-                script_path = r"C:\Users\bidault\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
+                script_path = r"C:\Users\bidau\OneDrive\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
                 
                 script_path = os.path.abspath(script_path)
 

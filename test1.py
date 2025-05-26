@@ -14,8 +14,8 @@ chemin_image = sys.argv[1]
 
 # ======== CONFIGURATION PRÉCISE ========
 torch.backends.cudnn.benchmark = True
-zip_path = r'C:\Users\bidault\Downloads\test.zip'
-extract_path = r'C:\Users\bidault\Downloads\fruits_dataset'
+zip_path = r'C:\Users\bidau\Downloads\test.zip'
+extract_path = r'C:\Users\bidau\Downloads\fruits_dataset'
 data_dir = extract_path
 batch_size = 16 # Consider reducing to 8 or 4 if memory allows and for potentially better generalization
 image_size = 224 # Can increase to 256 or 300 if more detail is needed and resources allow
@@ -173,4 +173,4 @@ if __name__ == "__main__":
 
 
 
-#C:\Users\bidault\Downloads\ananas.jpg
+#C:\Users\bidau\Downloads\ananas.jpg
