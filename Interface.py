@@ -379,7 +379,7 @@ class MenuPage(QWidget):
 
             try:
                 
-                script_path = r"C:\Users\bidau\OneDrive\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
+                script_path = r"C:\Users\bidault\Documents\GitHub\2024_2025_projet3_-GP10_Bidault_Causse_Carlot\test1.py"
                 
                 script_path = os.path.abspath(script_path)
 
@@ -548,9 +548,16 @@ class MenuPage(QWidget):
                 found = False
                 for stock in user_data.ingredients:
                     if stock["name"].lower().strip() == ing_normalise and stock["unit"].lower().strip() == info["unite"].lower().strip():
-                        if stock["quantity"] >= info["quantite"]:
-                            found = True
-                            break
+                        try:
+                         if float(stock["quantity"]) >= float(info["quantite"]):
+                          found = True
+                         break
+                        except (ValueError, TypeError) as e:
+                            QMessageBox.critical(detail_window, "Erreur de type", f"Erreur de format sur l'ingrédient '{ing}': {e}")
+                        return
+
+                        found = True
+                        break
                 if not found:
                     manquants.append(ing_normalise)
 
